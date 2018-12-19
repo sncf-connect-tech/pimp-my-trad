@@ -30,6 +30,7 @@ import org.bson.codecs.EncoderContext;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import sncf.oui.pmt.infrastructure.AuthenticationDetails;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -38,13 +39,15 @@ import java.util.Optional;
 @Component
 public class ProjectMetaCodec implements Codec<ProjectMetadata> {
 
+    private final AuthenticationDetails details;
     private Codec<KeysetMetadata> keysetMetadataCodec;
     private ProjectMetadataFactory factory;
 
     @Autowired
-    public ProjectMetaCodec(Codec<KeysetMetadata> keysetMetadataCodec, ProjectMetadataFactory factory) {
+    public ProjectMetaCodec(Codec<KeysetMetadata> keysetMetadataCodec, ProjectMetadataFactory factory, AuthenticationDetails details) {
         this.keysetMetadataCodec = keysetMetadataCodec;
         this.factory = factory;
+        this.details = details;
     }
 
     @Override
@@ -108,6 +111,8 @@ public class ProjectMetaCodec implements Codec<ProjectMetadata> {
         } else {
             bsonWriter.writeObjectId(new ObjectId());
         }
+        bsonWriter.writeName("_user");
+        bsonWriter.writeString(details.getUser().block()); // this is bad :(
         bsonWriter.writeName("origin");
         bsonWriter.writeString(projectMetadata.getOrigin());
         bsonWriter.writeName("projectName");

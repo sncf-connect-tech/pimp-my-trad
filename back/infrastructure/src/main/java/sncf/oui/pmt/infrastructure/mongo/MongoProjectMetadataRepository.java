@@ -28,12 +28,25 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import sncf.oui.pmt.infrastructure.AuthenticationDetails;
 
 @Component
 public class MongoProjectMetadataRepository extends MongoRepository<ProjectMetadata> implements ProjectMetadataRepository {
 
+    private final AuthenticationDetails details;
+
     protected String collectionName() {
         return "projects";
+    }
+
+    protected Flux<ProjectMetadata> actualFindByName(String name) {
+        return details.getUser()
+                .map(user -> Filters.and(
+                        Filters.eq("projectName", name),
+                        Filters.eq("_user", user)
+                ))
+                .flux()
+                .flatMap(this::find);
     }
 
     protected Class<ProjectMetadata> collectionClass() {
@@ -41,8 +54,9 @@ public class MongoProjectMetadataRepository extends MongoRepository<ProjectMetad
     }
 
     @Autowired
-    public MongoProjectMetadataRepository(MongoDatabase database) {
+    public MongoProjectMetadataRepository(MongoDatabase database, AuthenticationDetails details) {
         super(database);
+        this.details = details;
     }
 
     @Override
@@ -52,7 +66,7 @@ public class MongoProjectMetadataRepository extends MongoRepository<ProjectMetad
 
     @Override
     public Mono<Boolean> exists(String name) {
-        return find(Filters.eq("projectName", name))
+        return actualFindByName(name)
                 .map(any -> true)
                 .switchIfEmpty(Mono.just(false))
                 .next();
@@ -60,7 +74,7 @@ public class MongoProjectMetadataRepository extends MongoRepository<ProjectMetad
 
     @Override
     public Mono<ProjectMetadata> findByName(String name) {
-        return find(Filters.eq("projectName", name))
+        return actualFindByName(name)
                 .switchIfEmpty(Mono.error(new ProjectNotFoundException()))
                 .next();
     }
