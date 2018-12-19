@@ -8,6 +8,8 @@ This repository includes an API (see [swagger.yaml](swagger.yaml) for details) a
 
 ## Documentation
 
+Documentation is available [here](https://voyages-sncf-technologies.github.io/pimp-my-trad/).
+
 The documentation uses [MKDocs](https://www.mkdocs.org).
 
 ```

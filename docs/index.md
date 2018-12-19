@@ -8,11 +8,11 @@
 
 ## Importing and setting up keysets
 
-![Importing a project](/img/importing.png)
+![Importing a project](img/importing.png)
 
 To get started, import a project from a git repository (in the future, other VCS might be supported).
 
-![Selecting files](/img/selecting_files.png)
+![Selecting files](img/selecting_files.png)
 
 By browsing to the "Fichiers" tab, you may then create a _keyset_. A keyset groups files that refer to the same _translation keys_ together. One such file might look like that.
 
@@ -30,7 +30,7 @@ Beside `.properties` files, `.json` files are supported. Support for other forma
 
 ## Managing keys
 
-![Main screen](/img/main.png)
+![Main screen](img/main.png)
 
 Back to the main screen ("Clés" tab), you should now see your translation keys as well as their value in the default language (French).
 

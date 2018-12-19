@@ -2,7 +2,7 @@
 
 ## Building
 
-The backend uses [Maven](https://maven.apache.org/). Just tweak some settings before building (the [sample file](back/pimp-my-trad-api/src/main/resources/application.tmpl.yml) is mostly empty); currently, the app requires adding Github/Gitlab/etc credentials with write access to the repositories in the configuration file. 
+The backend uses [Maven](https://maven.apache.org/). Just tweak some settings before building (the [sample file](/back/pimp-my-trad-api/src/main/resources/application.tmpl.yml) is mostly empty); currently, the app requires adding Github/Gitlab/etc credentials with write access to the repositories in the configuration file. 
 
 ```
 $ cp back/pimp-my-trad-api/src/main/resources/application.tmpl.yml back/pimp-my-trad-api/src/main/resources/application.yml
@@ -30,7 +30,7 @@ docker run --rm -v "$PWD/front":/usr/src/app -v "$PWD/front/build":/usr/src/app/
 
 ## Running
 
-You may run the project using Docker and docker-compose for ease. A sample [docker-compose.yml](docker-compose.yml) is included. Don't forget to include a proper configuration file before building, see [application-docker.tmpl.yml](back/pimp-my-trad-api/src/main/resources/application-docker.tmpl.yml).
+You may run the project using Docker and docker-compose for ease. A sample [docker-compose.yml](/docker-compose.yml) is included. Don't forget to include a proper configuration file before building, see [application-docker.tmpl.yml](/back/pimp-my-trad-api/src/main/resources/application-docker.tmpl.yml).
 
 ```
 $ docker-compose up -d
@@ -48,7 +48,7 @@ You will also need a Mongo instance running.
 
 Maven should run some unit tests automatically.
 
-"Behaviour" tests are available in the `bdd` package. A sample [docker-compose-test.yml](docker-compose-test.yml) file is included to demonstrate how to run these tests.
+"Behaviour" tests are available in the `bdd` package. A sample [docker-compose-test.yml](/docker-compose-test.yml) file is included to demonstrate how to run these tests.
 
 ```
 docker-compose -f docker-compose-test.yml run --use-aliases bdd
