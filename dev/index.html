@@ -125,7 +125,7 @@
               
                 <h1 id="installation-and-development">Installation and development</h1>
 <h2 id="building">Building</h2>
-<p>The backend uses <a href="https://maven.apache.org/">Maven</a>. Just tweak some settings before building (the <a href="back/pimp-my-trad-api/src/main/resources/application.tmpl.yml">sample file</a> is mostly empty); currently, the app requires adding Github/Gitlab/etc credentials with write access to the repositories in the configuration file. </p>
+<p>The backend uses <a href="https://maven.apache.org/">Maven</a>. Just tweak some settings before building (the <a href="/back/pimp-my-trad-api/src/main/resources/application.tmpl.yml">sample file</a> is mostly empty); currently, the app requires adding Github/Gitlab/etc credentials with write access to the repositories in the configuration file. </p>
 <pre><code>$ cp back/pimp-my-trad-api/src/main/resources/application.tmpl.yml back/pimp-my-trad-api/src/main/resources/application.yml
 $ mvn package
 </code></pre>
@@ -144,7 +144,7 @@ $ npm run build
 </code></pre>
 
 <h2 id="running">Running</h2>
-<p>You may run the project using Docker and docker-compose for ease. A sample <a href="docker-compose.yml">docker-compose.yml</a> is included. Don't forget to include a proper configuration file before building, see <a href="back/pimp-my-trad-api/src/main/resources/application-docker.tmpl.yml">application-docker.tmpl.yml</a>.</p>
+<p>You may run the project using Docker and docker-compose for ease. A sample <a href="/docker-compose.yml">docker-compose.yml</a> is included. Don't forget to include a proper configuration file before building, see <a href="/back/pimp-my-trad-api/src/main/resources/application-docker.tmpl.yml">application-docker.tmpl.yml</a>.</p>
 <pre><code>$ docker-compose up -d
 </code></pre>
 
@@ -154,7 +154,7 @@ $ npm run build
 <p>You will also need a Mongo instance running.</p>
 <h2 id="testing">Testing</h2>
 <p>Maven should run some unit tests automatically.</p>
-<p>"Behaviour" tests are available in the <code>bdd</code> package. A sample <a href="docker-compose-test.yml">docker-compose-test.yml</a> file is included to demonstrate how to run these tests.</p>
+<p>"Behaviour" tests are available in the <code>bdd</code> package. A sample <a href="/docker-compose-test.yml">docker-compose-test.yml</a> file is included to demonstrate how to run these tests.</p>
 <pre><code>docker-compose -f docker-compose-test.yml run --use-aliases bdd
 </code></pre>
 
