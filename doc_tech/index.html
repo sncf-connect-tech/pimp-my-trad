@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>Documentation technique - Pimp my Trad documentation</title>
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Documentation technique";
+    var mkdocs_page_input_path = "doc_tech.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> Pimp my Trad documentation</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	<ul class="current">
+	  
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="..">Home</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../auth/">Authentication</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../dev/">Installation and development</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../doc_func/">Documentation fonctionnelle</a>
+	    </li>
+          
+            <li class="toctree-l1 current">
+		
+    <a class="current" href="./">Documentation technique</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l2"><a href="#architecture-logique">Architecture logique</a></li>
+    
+
+    <li class="toctree-l2"><a href="#concepts">Concepts</a></li>
+    
+
+    <li class="toctree-l2"><a href="#lecture-et-ecriture-de-fichiers-avec-gestion-de-conflits">Lecture et écriture de fichiers avec gestion de conflits</a></li>
+    
+
+    <li class="toctree-l2"><a href="#interpretation-des-drapeaux-dans-le-cas-de-git">Interprétation des drapeaux dans le cas de Git</a></li>
+    
+
+    <li class="toctree-l2"><a href="#synchronisation-dans-le-cas-de-git">Synchronisation dans le cas de Git</a></li>
+    
+
+    </ul>
+	    </li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">Pimp my Trad documentation</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Documentation technique</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="architecture-logique">Architecture logique</h1>
+<p><img alt="" src="../schema/architecture.png" /></p>
+<p>L'API utilise Mongo pour stocker des métadonnées uniquement. Les vraies données sont lues à partir de repo clonés via l'app. L'API interragit avec Git, mais d'autres VCS devraient pouvoir être implémenté.</p>
+<h1 id="concepts">Concepts</h1>
+<p>Côté base de données, on ne garde que les métadonnées des Project/Keyset/Key. Les objects <code>Project</code>, <code>Keyset</code> et <code>Key</code> sont fournis en réponse par l'API Rest (cf Swagger).</p>
+<pre><code class="json">{
+    &quot;state&quot;: &quot;Conflict&quot;,
+    &quot;translations&quot;: {
+        &quot;FR&quot;: [
+            &quot;Annuler&quot;
+        ],
+        &quot;DE&quot;: [
+            &quot;stornieren&quot;
+        ],
+        &quot;ES&quot;: [
+            &quot;Anular&quot;
+        ],
+        &quot;EN&quot;: [
+            &quot;Cancel&quot;,
+            &quot;Something else&quot;
+        ]
+    }
+}
+</code></pre>
+
+<p>Une <code>Key</code> est la donnée d'un état de clé (à traduire = <em>TODO</em>, traduction demandée = <em>INPROGRESS</em>...) et de traductions (correspondance langue et liste de chaînes – la liste comporte une valeur en cas général, et deux quand un conflit survient).</p>
+<p>Un <code>Keyset</code> agrège un ensemble de clé ensemble, et fournit quelques données supplémentaires (nom, id, langages pris en compte...). Finalement, un <code>Project</code> agrège divers <code>Keyset</code>.</p>
+<p>Côté représentation interne, <code>ProjectMetadata</code> et <code>KeysetMetadata</code> permettent de reconstruire les entités correspondantes.</p>
+<p>Le <code>KeysetMetadata</code> donne les chemins des fichiers de traduction qui contiennent les clés d'un <code>Keyset</code>. Par exemple, un fichier va contenir les traductions en anglais et un autre les traductions en allemand, et ce pour les mêmes clés techniques.</p>
+<p><img alt="" src="../schema/exportentities.png" /></p>
+<p>Les exports sont gérés via deux entités. L'entité <code>ExportDetails</code> contient l'export CSV ainsi que des métadonnées (sauvées en base) qui permettent de retrouver l'export.</p>
+<p>Il faut en effet conserver des infos sur l'export (d'où <code>KeySpec</code> notamment qui redonne le "chemin" complet vers une clé: projet, keyset, identifiant) car l'export ne contient que du texte brute, aucune métadonnée.</p>
+<h1 id="lecture-et-ecriture-de-fichiers-avec-gestion-de-conflits">Lecture et écriture de fichiers avec gestion de conflits</h1>
+<blockquote>
+<p><em>Remarque. Ici, on utilise le vocabulaire git ou presque, mais l'abstraction devrait pouvoir s'appliquer à d'autres systèmes de versionnement.</em></p>
+</blockquote>
+<p>Les étapes pour la lecture : (géré par <code>FileHandler</code>)</p>
+<ul>
+<li><strong>lecture des lignes</strong> (fichier → <code>Flux&lt;String&gt;</code>) : assuré par <code>ConflictingFileHandle</code>; un drapeau (<code>ConflictFlag</code>) indique si l'on veut lire nos lignes (<code>ConflictFlag.StrictlyOurs</code>) ou les lignes upstream s'il y a des conflits (<code>ConflictFlag.StrictlyTheirs</code>), ou encore les lignes en commun (<code>ConflictFlag.Solved</code>), <code>null</code> peut être utilisé au lieu d'un drapeau s'il n'y a pas de conflit;</li>
+<li><strong>traduction en dictionnaire</strong> (<code>Flux&lt;String&gt;</code> → <code>Map&lt;String, String&gt;</code>) : un <code>MapEncoder</code> "adapté" (critère : extension du fichier) traduit le flux de lignes en dictionnaire (implémenté : json, properties);</li>
+<li><strong>adaptation</strong> : opération de diff au niveau des <code>Maps</code> selon que l'on veuille lire la version upstream ou la notre, détails ci dessous;</li>
+<li><strong>conversion en <code>Keyset</code></strong> : utilisation de <code>Keyset.fromMaps</code> pour obtenir une entité du domaine pour traitement fonctionnel.</li>
+</ul>
+<p>Pour l'écriture, c'est l'inverse : <code>Map</code> vers <code>Mono&lt;String&gt;</code> (note : <code>Flux&lt;String&gt;</code> en lecture pour épargner du travail aux formats qui utilisent les sauts de lignes) vers fichier.</p>
+<p>Une classe <code>AsyncFile</code> dans le package <code>infrastructure</code> permet de lire les fichiers de manière asynchrone en produisant des flux Reactor.</p>
+<blockquote>
+<p><em>Remarque. Les <code>MapEncoder</code> sont très simples : ils ne font que de l'encodage et du décodage entre flux de chaînes et dictionnaire. En particulier, ils ne doivent pas décrire plus précisemment le processus de décodage, et <strong>ne savent donc pas décoder des fragments de fichiers</strong>. Il faut donc lire deux versions distinctes des fichiers, et (re)faire le diff au besoin sur les dictionnaires.</em></p>
+</blockquote>
+<p>Plus précisemment, la lecture se fait ainsi :</p>
+<ul>
+<li><strong>lecture de notre version</strong> : s'il y a des conflits, on lit nos lignes (strictement) + les lignes en commun; sinon on lit juste notre fichier</li>
+<li><strong>lecture de leur patch</strong> : on lit leurs lignes (strictement), en retirant ce qui est résolu</li>
+</ul>
+<p>En résumé :</p>
+<p><img alt="" src="../schema/read.png" /></p>
+<h1 id="interpretation-des-drapeaux-dans-le-cas-de-git">Interprétation des drapeaux dans le cas de Git</h1>
+<p>La lecture se passe ainsi : on lit le fichier, en mappant chaque ligne vers un <code>ConflictMark</code>.</p>
+<pre><code class="json">{
+  &quot;foo&quot;: &quot;bar&quot;,
+  &lt;&lt;&lt;&lt;&lt;&lt;&lt; ...
+  &quot;conflict&quot;: &quot;v1&quot;,
+  =======
+  &quot;conflict&quot;: &quot;v2&quot;,
+  &gt;&gt;&gt;&gt;&gt;&gt;&gt;
+}
+</code></pre>
+
+<p>Devient : </p>
+<pre><code>ConflictMark.NONE
+ConflictMark.NONE
+ConflictMark.START
+ConflictMark.NONE
+ConflictMark.SPLIT
+ConflictMark.NONE
+ConflictMark.END
+ConflictMark.NONE
+</code></pre>
+
+<p>Puis on répète la marque précédente quand on a <code>NONE</code>.</p>
+<pre><code>ConflictMark.NONE
+ConflictMark.NONE
+ConflictMark.START
+ConflictMark.START
+ConflictMark.SPLIT
+ConflictMark.SPLIT
+ConflictMark.END
+ConflictMark.END
+</code></pre>
+
+<p>Ainsi, la lecture avec drapeau <code>StrictlyOurs</code> correspond au lignes mappées vers <code>START</code>, <code>StrictlyTheirs</code> à celles mappées vers <code>SPLIT</code>.</p>
+<p>Le drapeau <code>Resolved</code> correspond pour sa part aux lignes mappées vers <code>END</code> ou <code>NONE</code>, ou à la lecture simple d'un fichier de résolution s'il existe.</p>
+<h1 id="synchronisation-dans-le-cas-de-git">Synchronisation dans le cas de Git</h1>
+<p><img alt="" src="../schema/sync.png" /></p>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+      
+        <a href="../doc_func/" class="btn btn-neutral" title="Documentation fonctionnelle"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+        <span><a href="../doc_func/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+    </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
+
+</body>
+</html>

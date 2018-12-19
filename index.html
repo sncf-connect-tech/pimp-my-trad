@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="None">
+  
+  <link rel="shortcut icon" href="img/favicon.ico">
+  <title>Home - Pimp my Trad documentation</title>
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Home";
+    var mkdocs_page_input_path = "index.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="js/jquery-2.1.1.min.js" defer></script>
+  <script src="js/modernizr-2.8.3.min.js" defer></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href="." class="icon icon-home"> Pimp my Trad documentation</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="./search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	<ul class="current">
+	  
+          
+            <li class="toctree-l1 current">
+		
+    <a class="current" href=".">Home</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l2"><a href="#project-goals">Project goals</a></li>
+    
+
+    <li class="toctree-l2"><a href="#usage">Usage</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l3" href="#importing-and-setting-up-keysets">Importing and setting up keysets</a></li>
+        
+            <li><a class="toctree-l3" href="#managing-keys">Managing keys</a></li>
+        
+            <li><a class="toctree-l3" href="#adding-keys-and-languages">Adding keys and languages</a></li>
+        
+            <li><a class="toctree-l3" href="#version-control">Version control</a></li>
+        
+        </ul>
+    
+
+    <li class="toctree-l2"><a href="#planned-features">Planned features</a></li>
+    
+
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="auth/">Authentication</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="dev/">Installation and development</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="doc_func/">Documentation fonctionnelle</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="doc_tech/">Documentation technique</a>
+	    </li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href=".">Pimp my Trad documentation</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href=".">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Home</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h2 id="project-goals">Project goals</h2>
+<ul>
+<li><strong>translate apps faster</strong>: Pimp my Trad integrates with git to edit your files directly</li>
+<li><strong>prevent mistakes and allow automation</strong>: avoid manually editing translation files</li>
+<li>ease communication with translation agencies by exporting relevant data to a suitable format</li>
+</ul>
+<h1 id="usage">Usage</h1>
+<h2 id="importing-and-setting-up-keysets">Importing and setting up keysets</h2>
+<p><img alt="Importing a project" src="/img/importing.png" /></p>
+<p>To get started, import a project from a git repository (in the future, other VCS might be supported).</p>
+<p><img alt="Selecting files" src="/img/selecting_files.png" /></p>
+<p>By browsing to the "Fichiers" tab, you may then create a <em>keyset</em>. A keyset groups files that refer to the same <em>translation keys</em> together. One such file might look like that.</p>
+<pre><code>GREET_VISITOR=Welcome
+</code></pre>
+
+<p>While the corresponding file in the same keyset but for another language might read as follows.</p>
+<pre><code>GREET_VISITOR=Bienvenue
+</code></pre>
+
+<p>Beside <code>.properties</code> files, <code>.json</code> files are supported. Support for other formats can easily be added (see <code>sncf.oui.pmt.domain.keyset.MapEncoder</code>).</p>
+<h2 id="managing-keys">Managing keys</h2>
+<p><img alt="Main screen" src="/img/main.png" /></p>
+<p>Back to the main screen ("Clés" tab), you should now see your translation keys as well as their value in the default language (French).</p>
+<p>Each key has a <em>completion state</em>: <code>TODO</code>, <code>INPROGRESS</code>, <code>DONE</code> (and <code>CONFLICT</code>).</p>
+<p>By clicking one of the state tags on the right, you may quickly filter which keys need work -- ie which keys have missing (<code>TODO</code>) or temporary translations. You may also use the search bar to quickly find a key.</p>
+<p>Most of the time, the state is inferred (for instance, if a key is empty for a given language, it probably is <code>TODO</code>). However, you may add a <em>tag</em> to a translation to give a hint about the key state. For instance, the <code>INPROGRESS</code> state has no special meaning; you could use it to indicate that you have requested a translation for that particular key.</p>
+<h2 id="adding-keys-and-languages">Adding keys and languages</h2>
+<p>From the sidebar, you may add new keys as well as new languages. Both these features let you select which project and keyset should be modified.</p>
+<p>Pimp my Trad will try to guess a fitting name for new files when adding a new language.</p>
+<h2 id="version-control">Version control</h2>
+<p>By hitting "Synchroniser", the repository will receive your updated translations (and you will receive updates as well).</p>
+<p>Since Pimp my Trad uses Git, it might run into conflicts; should this happen, you will be warned and relevant keys will have the <code>CONFLICT</code> state. You will be given the opportunity to fix conflicts from the interface before clicking "Synchroniser" again.</p>
+<h1 id="planned-features">Planned features</h1>
+<p>The tool was built to ease our translation process. One essential feature that will come later is the ability to export and import keys in a format that is suitable to communicate with our translation agency. The <code>INPROGRESS</code> state will be used to indicate that an export has been made.</p>
+<p>Support for more languages (and language-region combinations) and more file formats is planned, depending on our needs. The former could be implemented through configuration files.</p>
+<p>The search bar has an extremely simple filtering behaviour which has to be changed.</p>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="auth/" class="btn btn-neutral float-right" title="Authentication">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+      
+        <span style="margin-left: 15px"><a href="auth/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+    <script>var base_url = '.';</script>
+    <script src="js/theme.js" defer></script>
+      <script src="search/main.js" defer></script>
+
+</body>
+</html>
+
+<!--
+MkDocs version : 1.0.4
+Build Date UTC : 2018-12-19 15:25:30
+-->

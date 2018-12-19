@@ -1,5 +1,0 @@
-mongohost: ${MONGO_HOST}
-dataroot: ${DATA_ROOT}
-gitPort: ${GIT_PORT}
-gitHost: ${GIT_HOST}
-apiHost: ${API_HOST}

@@ -1,9 +1,0 @@
-username: test_user
-password: password
-googleApiKey:
-mongohost: ${MONGO_HOST}
-dataroot: ${DATA_ROOT}
-gitlab:
-ldap:
-  url: foo
-  domain: bar

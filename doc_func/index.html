@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  
+  <link rel="shortcut icon" href="../img/favicon.ico">
+  <title>Documentation fonctionnelle - Pimp my Trad documentation</title>
+  <link href='https://fonts.googleapis.com/css?family=Lato:400,700|Roboto+Slab:400,700|Inconsolata:400,700' rel='stylesheet' type='text/css'>
+
+  <link rel="stylesheet" href="../css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../css/theme_extra.css" type="text/css" />
+  <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/styles/github.min.css">
+  
+  <script>
+    // Current page data
+    var mkdocs_page_name = "Documentation fonctionnelle";
+    var mkdocs_page_input_path = "doc_func.md";
+    var mkdocs_page_url = null;
+  </script>
+  
+  <script src="../js/jquery-2.1.1.min.js" defer></script>
+  <script src="../js/modernizr-2.8.3.min.js" defer></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.12.0/highlight.min.js"></script>
+  <script>hljs.initHighlightingOnLoad();</script> 
+  
+</head>
+
+<body class="wy-body-for-nav" role="document">
+
+  <div class="wy-grid-for-nav">
+
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side stickynav">
+      <div class="wy-side-nav-search">
+        <a href=".." class="icon icon-home"> Pimp my Trad documentation</a>
+        <div role="search">
+  <form id ="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" title="Type search term here" />
+  </form>
+</div>
+      </div>
+
+      <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+	<ul class="current">
+	  
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="..">Home</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../auth/">Authentication</a>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../dev/">Installation and development</a>
+	    </li>
+          
+            <li class="toctree-l1 current">
+		
+    <a class="current" href="./">Documentation fonctionnelle</a>
+    <ul class="subnav">
+            
+    <li class="toctree-l2"><a href="#api">API</a></li>
+    
+
+    <li class="toctree-l2"><a href="#fonctionnalites">Fonctionnalités</a></li>
+    
+        <ul>
+        
+            <li><a class="toctree-l3" href="#visualiser-le-reste-a-faire">Visualiser le reste à faire</a></li>
+        
+            <li><a class="toctree-l3" href="#ajout-de-wordings-et-langues">Ajout de wordings et langues</a></li>
+        
+            <li><a class="toctree-l3" href="#traduire-immediatemment">Traduire immédiatemment</a></li>
+        
+            <li><a class="toctree-l3" href="#importer-et-exporter-des-traductions">Importer et exporter des traductions</a></li>
+        
+            <li><a class="toctree-l3" href="#centraliser-les-modifications">Centraliser les modifications</a></li>
+        
+        </ul>
+    
+
+    </ul>
+	    </li>
+          
+            <li class="toctree-l1">
+		
+    <a class="" href="../doc_tech/">Documentation technique</a>
+	    </li>
+          
+        </ul>
+      </div>
+      &nbsp;
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+        <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+        <a href="..">Pimp my Trad documentation</a>
+      </nav>
+
+      
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="breadcrumbs navigation">
+  <ul class="wy-breadcrumbs">
+    <li><a href="..">Docs</a> &raquo;</li>
+    
+      
+    
+    <li>Documentation fonctionnelle</li>
+    <li class="wy-breadcrumbs-aside">
+      
+    </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main">
+            <div class="section">
+              
+                <h1 id="api">API</h1>
+<p>L'API est documentée par un fichier Swagger (voir repo).</p>
+<p><img alt="" src="../schema/overview.png" /></p>
+<h1 id="fonctionnalites">Fonctionnalités</h1>
+<h2 id="visualiser-le-reste-a-faire">Visualiser le reste à faire</h2>
+<p>A chaque clé est associé un état permettant le filtrage de celle-ci, et une visualition de ce qu'il reste à traduire. Un système de tags permet de modifier cet état.</p>
+<p>Par exemple : la traduction <code>Contenu d'une clé [TODO]</code> a l'état <code>TODO</code>.</p>
+<p>L'état de la clé (ensemble des traductions) est l'état le plus "critique" parmi les états des traductions : plus critique = <code>TODO</code> &gt; <code>INPROGRESS</code> &gt; <code>DONE</code> = moins critique.</p>
+<p>Une traduction vide a l'état <code>TODO</code> (et donc la clé associée aussi).</p>
+<h2 id="ajout-de-wordings-et-langues">Ajout de wordings et langues</h2>
+<p>La modification (ou l'ajout – l'opération est la même) d'un wording est possible. Les fichiers contenant les clés sont modifiés. Note : l'ordre des clés n'est pas forcément le même dans le fichier final.</p>
+<p>On peut également ajouter une langue à un Keyset. Cela ne fait qu'ajouter un nouveau fichier comprenant les clés du Keyset ciblé, et leur associe des traductions vides : <code>wording.hello=</code>.</p>
+<h2 id="traduire-immediatemment">Traduire immédiatemment</h2>
+<p>Il est possible de traduire directement une clé à l'aide d'un service externe (Google Translate). Comme précédemment, les fichier sont directement écrits. </p>
+<p>Un tag <code>TODO</code> est ajouté à la traduction obtenue.</p>
+<h2 id="importer-et-exporter-des-traductions">Importer et exporter des traductions</h2>
+<p>L'export rassemble les traductions françaises de toutes les clés <code>TODO</code> ou <code>INPROGRESS</code> dans un fichier CSV (une seule colonne).</p>
+<p>La correspondance entre chaque ligne et ses informations techniques (projet, keyset, identifiant de clé) est sauvegardée en base, et ces données peuvent être récupérées à l'aide du numéro d'export.</p>
+<p>L'import modifie directement les fichiers également.</p>
+<h2 id="centraliser-les-modifications">Centraliser les modifications</h2>
+<p>Les modifications des fichiers sont centralisées en passant par un système de versionnement comme Git.</p>
+<p>Cela se traduit par la fonctionnalité de synchronisation (cf. Swagger).</p>
+<p>Deux cas de figure : si le rappatriement des changements distants échouant, des clés passent dans l'état <code>CONFLICT</code>. Une fois les conflits résolus en modifiant les clés en conflit, il est possible de synchroniser à nouveau.</p>
+<p>Sinon, les changements locaux sont partagés (et les changements distants sont rappatriés).</p>
+<p><img alt="" src="../schema/func_sync.png" /></p>
+              
+            </div>
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../doc_tech/" class="btn btn-neutral float-right" title="Documentation technique">Next <span class="icon icon-circle-arrow-right"></span></a>
+      
+      
+        <a href="../dev/" class="btn btn-neutral" title="Installation and development"><span class="icon icon-circle-arrow-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <!-- Copyright etc -->
+    
+  </div>
+
+  Built with <a href="http://www.mkdocs.org">MkDocs</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>.
+</footer>
+      
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+
+  <div class="rst-versions" role="note" style="cursor: pointer">
+    <span class="rst-current-version" data-toggle="rst-current-version">
+      
+      
+        <span><a href="../dev/" style="color: #fcfcfc;">&laquo; Previous</a></span>
+      
+      
+        <span style="margin-left: 15px"><a href="../doc_tech/" style="color: #fcfcfc">Next &raquo;</a></span>
+      
+    </span>
+</div>
+    <script>var base_url = '..';</script>
+    <script src="../js/theme.js" defer></script>
+      <script src="../search/main.js" defer></script>
+
+</body>
+</html>
