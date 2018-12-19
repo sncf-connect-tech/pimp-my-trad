@@ -1,0 +1,7 @@
+# Created by .ignore support plugin (hsz.mobi)
+.idea
+target/
+*.iml
+/pimp-my-trad-api/src/main/resources/application.yml
+#/pimp-my-trad-api/src/main/resources/application-*.yml
+!/pimp-my-trad-api/src/main/resources/application*.tmpl.yml

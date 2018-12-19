@@ -1,0 +1,4 @@
+# makes building much faster ;)
+node_modules
+src
+.idea

@@ -1,0 +1,5 @@
+mongohost: localhost:27017
+dataroot: ${APPDATA}\\pmt
+gitPort: 8888
+gitHost: localhost
+apiHost: localhost

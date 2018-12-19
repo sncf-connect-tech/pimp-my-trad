@@ -1,0 +1,428 @@
+openapi: '3.0.0'
+info:
+  version: 0.0.1
+  title: Pimp my Trad
+  description: Pimp my Trad API to manage projects.
+tags:
+  - name: project
+    description: Manipulate projects
+  - name: keyset
+    description: Manipulate keysets
+paths:
+  '/projects/':
+    get:
+      tags:
+        - project
+      description: Get all projects.
+      responses:
+        200:
+          description: An array of projects
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Project'
+    post:
+      tags:
+        - project
+      description: Add a project from a Git repository.
+      requestBody:
+        description: A description of a Git repository.
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GitDesc'
+      responses:
+        201:
+          description: The newly created project
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+        409:
+          description: Occurs if a project with same name exists (currently, the name is determined from the repository url).
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProjectAlreadyExistsException'
+  '/projects/{name}':
+    get:
+      tags:
+        - project
+      description: Get a single project by its name.
+      parameters:
+        - $ref: '#/components/parameters/projectName'
+      responses:
+        200:
+          description: The requested project
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Project'
+        404:
+          $ref: '#/components/responses/projectNotFound'
+  '/projects/{name}/files':
+    get:
+      tags:
+        - project
+      description: List files owned by the given project
+      parameters:
+        - $ref: '#/components/parameters/projectName'
+        - name: path
+          required: false
+          in: query
+          description: Directory to list files from, specified as a path that is relative to the project root.
+          schema:
+            type: string
+      responses:
+        200:
+          description: A flat list of file paths, given relative to the project root. If path is unspecified, list files at project root.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+        404:
+          $ref: '#/components/responses/projectNotFound'
+  '/projects/sync':
+    post:
+      tags:
+        - project
+      description: Synchronize all projects.
+      responses:
+        200:
+          $ref: '#/components/responses/syncResp'
+  '/projects/{name}/sync':
+    post:
+      tags:
+        - project
+      description: Synchronize a project (import changes from upstream, push local changes).
+      parameters:
+        - $ref: '#/components/parameters/projectName'
+      responses:
+        200:
+          $ref: '#/components/responses/syncResp'
+  '/projects/{name}/export':
+    get:
+      tags:
+        - project
+      description: Export a project.
+      parameters:
+        - $ref: '#/components/parameters/projectName'
+      responses:
+        201:
+          $ref: '#/components/responses/anExport'
+  '/projects/export':
+    get:
+      tags:
+        - project
+      description: Export all projects.
+      responses:
+        201:
+          $ref: '#/components/responses/anExport'
+  '/projects/recentExports':
+    get:
+      tags:
+        - project
+      description: List recent exports
+      parameters:
+        - name: weekNum
+          in: query
+          description: 0 = most recent week, 1 = second to most recent...
+          schema:
+            type: integer
+      responses:
+        200:
+          $ref: '#/components/responses/exportsList'
+  '/projects/{name}/keysets':
+    post:
+      tags:
+        - keyset
+      description: Add a keyset to a project.
+      parameters:
+        - $ref: '#/components/parameters/projectName'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/KeysetInput'
+      responses:
+        201:
+          description: The newly created keyset.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Keyset'
+        404:
+          $ref: '#/components/responses/projectNotFound'
+  '/projects/{name}/keysets/{keysetId}':
+    put:
+      tags:
+        - keyset
+      description: Modify an __existing__ keyset, ie add a new language and file to the keyset; this allows modifying keys for this new language, translating to this language.
+      parameters:
+        - $ref: '#/components/parameters/projectName'
+        - $ref: '#/components/parameters/keysetId'
+        - name: overwrite
+          in: query
+          description: Should existing files be overwritten? Default is true
+          required: false
+          schema:
+            type: boolean
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/KeysetInput'
+      responses:
+        200:
+          description: The updated keyset
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Keyset'
+        404:
+          $ref: '#/components/responses/keyOrKeysetNotFound'
+  '/projects/{name}/keysets/{keysetId}/keys/{keyId}':
+    parameters:
+      - $ref: '#/components/parameters/projectName'
+      - $ref: '#/components/parameters/keysetId'
+      - $ref: '#/components/parameters/keyId'
+    get:
+      tags:
+        - keyset
+      description: Retrieve a key given its id and a keyset.
+      responses:
+        200:
+          $ref: '#/components/responses/aKey'
+        404:
+          $ref: '#/components/responses/keyOrKeysetNotFound'
+    put:
+      tags:
+        - keyset
+      description: Set the value of a key in the given keyset, or create a new one.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/KeyModificationInput'
+      responses:
+        200:
+          $ref: '#/components/responses/aKey'
+        404:
+          $ref: '#/components/responses/keyOrKeysetNotFound'
+  '/projects/{name}/keysets/{keysetId}/keys/{keyId}/translate':
+    post:
+      tags:
+        - keyset
+      description: Translate the key for a given language, using a third-party service.
+      parameters:
+        - $ref: '#/components/parameters/projectName'
+        - $ref: '#/components/parameters/keysetId'
+        - $ref: '#/components/parameters/keyId'
+      requestBody:
+        description: Target language
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                language:
+                  $ref: '#/components/schemas/Language'
+      responses:
+        200:
+          $ref: '#/components/responses/aKey'
+        404:
+          $ref: '#/components/responses/keyOrKeysetNotFound'
+components:
+  responses:
+    aKey:
+      description: A key
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Key'
+    syncResp:
+      description: Whether or not a sync operation resulted in conflicts
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/SyncResult'
+    projectNotFound:
+      description: Occurs if a project was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ProjectNotFoundException'
+    keyNotFound:
+      description: Occurs if a key was not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/KeyNotFoundException'
+    keyOrKeysetNotFound:
+      description: Occurs if a key or keyset was not found
+      content:
+        application/json:
+          schema:
+            oneOf:
+              - $ref: '#/components/schemas/KeysetNotFoundException'
+              - $ref: '#/components/schemas/KeyNotFoundException'
+    anExport:
+      description: A description of the export.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ExportDetails'
+    exportsList:
+      description: List of recent exports.
+      content:
+        application/json:
+          schema:
+            type: array
+            items:
+              $ref: '#/components/schemas/ExportMetadata'
+  parameters:
+    projectName:
+      name: name
+      required: true
+      in: path
+      description: Project name
+      schema:
+        type: string
+    keyId:
+      name: keyId
+      required: true
+      in: path
+      description: A key identifier
+      schema:
+        type: string
+    keysetId:
+      name: keysetId
+      required: true
+      in: path
+      description: The id of a keyset
+      schema:
+        type: integer
+  schemas:
+    ProjectNotFoundException:
+      type: object
+      properties:
+        error:
+          type: string
+          enum: ["Project not found"]
+    KeysetNotFoundException:
+      type: object
+      properties:
+        error:
+          type: string
+          enum: ["Keyset not found"]
+    KeyNotFoundException:
+      type: object
+      properties:
+        error:
+          type: string
+          enum: ["Key not found"]
+    ProjectAlreadyExistsException:
+      type: object
+      properties:
+        error:
+          type: string
+          enum: ["A project with that name already exists"]
+    Project:
+      type: object
+      properties:
+        name:
+          type: string
+        keysets:
+          type: array
+          items:
+            $ref: '#/components/schemas/Keyset'
+    Keyset:
+      type: object
+      properties:
+        id:
+          type: string
+          description: A unique identifier
+        name:
+          type: string
+          description: A suggested name for the keyset
+        supportedLanguages:
+          type: array
+          items:
+            $ref: '#/components/schemas/Language'
+        keys:
+          type: object
+          description: This object maps Key identifiers to actual Keys
+          additionalProperties:
+            $ref: '#/components/schemas/Key'
+    KeysetInput:
+      type: object
+      description: An object mapping Languages as strings to paths. These paths identify files holding keys in the specified language, and should be given relative to the project root.
+      example:
+        en: "i18n/en.json"
+      additionalProperties:
+        type: string
+    KeyModificationInput:
+      type: object
+      properties:
+        language:
+          $ref: '#/components/schemas/Language'
+        translation:
+          type: string
+    Language:
+      type: string
+      description: A country code
+      example: EN
+    Key:
+      type: object
+      properties:
+        state:
+          $ref: '#/components/schemas/KeyState'
+        translations:
+          type: object
+          description: A map of Languages to translations; when a conflict has occured, there are two translations instead of one
+          example:
+            fr: ["no conflict"]
+            en: ["our value", "their value"]
+          additionalProperties:
+            type: array
+            items:
+              type: string
+              example: translated string
+    KeyState:
+      type: string
+      enum: [Conflict, Todo, InProgress, Done]
+    SyncResult:
+      type: object
+      properties:
+        conflicts:
+          type: boolean
+    GitDesc:
+      type: object
+      properties:
+        url:
+          type: string
+        name:
+          type: string
+      required:
+       - url
+    ExportMetadata:
+      type: object
+      properties:
+        exportId:
+          type: string
+          example: ABC123
+        timestamp:
+          type: integer
+          example: 1515684307404
+    ExportDetails:
+      type: object
+      properties:
+        metadata:
+          $ref: '#/components/schemas/ExportMetadata'
+        exported:
+          type: string
+          example: "a csv export"

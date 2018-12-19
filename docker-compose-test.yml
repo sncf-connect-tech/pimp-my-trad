@@ -1,0 +1,41 @@
+version: '3'
+services:
+  back:
+    build: ./back/pimp-my-trad-api
+    environment:
+      - MONGO_HOST=mongo
+      - DATA_ROOT=/opt/pmtdata
+      - SPRING_PROFILE=docker,test
+      - LDAP_URL=whatever
+    depends_on:
+      - mongo
+    volumes:
+      - test-data:/opt/pmtdata
+    networks:
+      - defaultnet
+  bdd:
+    build: ./back/bdd
+    environment:
+      - MONGO_HOST=mongo
+      - DATA_ROOT=/opt/pmtdata
+      - GIT_PORT=8888
+      - GIT_HOST=bdd
+      - API_HOST=back
+    depends_on:
+      - mongo
+      - back
+    volumes:
+      - test-data:/opt/pmtdata
+      - report:/usr/src/pmt/target/cucumber-report
+    networks:
+      - defaultnet
+  mongo:
+    image: library/mongo:3.2
+    networks:
+      - defaultnet
+volumes:
+  test-data:
+  report:
+networks:
+  defaultnet:
+    driver: bridge

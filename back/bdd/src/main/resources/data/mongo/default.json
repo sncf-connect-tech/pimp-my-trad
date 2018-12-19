@@ -1,0 +1,14 @@
+{
+  "origin" : "FIXME",
+  "projectName" : "default",
+  "projectDir" : "default",
+  "keysets" : [
+    {
+      "id" : "ABC123",
+      "files" : {
+        "FR" : "fr.json",
+        "EN" : "en.json"
+      }
+    }
+  ]
+}

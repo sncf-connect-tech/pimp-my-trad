@@ -1,0 +1,25 @@
+services:
+  - docker
+
+env:
+  - DOCKER_COMPOSE_VERSION=1.23.2
+
+before_install:
+  - curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+  - sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+  - sudo apt-get update
+  - sudo apt-get -y -o Dpkg::Options::="--force-confnew" install docker-ce
+  - sudo rm /usr/local/bin/docker-compose
+  - curl -L https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-`uname -s`-`uname -m` > docker-compose
+  - chmod +x docker-compose
+  - sudo mv docker-compose /usr/local/bin
+
+script:
+  - cp back/pimp-my-trad-api/src/main/resources/application-docker.tmpl.yml back/pimp-my-trad-api/src/main/resources/application-docker.yml 
+  - docker run --rm -v $HOME/.m2:/root/.m2 -v $PWD/back:/usr/src/app -v $PWD/back/pimp-my-trad-api/target:/usr/src/app/target -w /usr/src/app maven:alpine mvn package
+  - docker run --rm -v $PWD/front:/usr/src/app -v $PWD/front/build:/usr/src/app/build -w /usr/src/app node:alpine ash -c 'npm install && npm run build'
+  - docker-compose -f docker-compose-test.yml up --exit-code-from bdd
+
+cache:
+  directories:
+  - $HOME/.m2

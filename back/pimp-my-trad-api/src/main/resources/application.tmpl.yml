@@ -1,0 +1,9 @@
+username:
+password:
+googleApiKey:
+mongohost: localhost:27017 # local deploy example
+dataroot: 
+gitlab: 
+ldap:
+  url: 
+  domain: 
