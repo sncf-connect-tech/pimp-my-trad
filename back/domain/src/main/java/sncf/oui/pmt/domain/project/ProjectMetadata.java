@@ -40,6 +40,7 @@ public class ProjectMetadata {
     private Optional<String> id;
     private List<KeysetMetadata> keysets;
     private String projectName;
+    private Optional<String> projectOwner;
     private String dataRoot;
 
     private String projectDir;
@@ -121,11 +122,6 @@ public class ProjectMetadata {
         return this;
     }
 
-    @Deprecated
-    public String getAbsoluteProjectDir() {
-        return Paths.get(dataRoot, projectDir).toString();
-    }
-
     public String getOrigin() {
         return origin;
     }
@@ -154,5 +150,14 @@ public class ProjectMetadata {
 
     public String getProjectDir() {
         return projectDir;
+    }
+
+    public Optional<String> getProjectOwner() {
+        return projectOwner;
+    }
+
+    public ProjectMetadata setProjectOwner(String projectOwner) {
+        this.projectOwner = Optional.ofNullable(projectOwner);
+        return this;
     }
 }

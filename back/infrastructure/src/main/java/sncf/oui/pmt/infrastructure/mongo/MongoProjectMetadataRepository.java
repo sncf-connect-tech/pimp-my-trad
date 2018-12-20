@@ -43,7 +43,7 @@ public class MongoProjectMetadataRepository extends MongoRepository<ProjectMetad
         return details.getUser()
                 .map(user -> Filters.and(
                         Filters.eq("projectName", name),
-                        Filters.eq("_user", user)
+                        Filters.eq("projectOwner", user)
                 ))
                 .flux()
                 .flatMap(this::find);
@@ -88,7 +88,8 @@ public class MongoProjectMetadataRepository extends MongoRepository<ProjectMetad
 
     @Override
     public Mono<ProjectMetadata> save(ProjectMetadata project) {
-        return insert(project);
+        return details.getUser()
+                .flatMap(user -> insert(project.setProjectOwner(user)));
     }
 
     @Override

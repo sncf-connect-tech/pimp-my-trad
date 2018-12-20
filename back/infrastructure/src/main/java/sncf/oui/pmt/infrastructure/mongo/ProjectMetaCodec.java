@@ -63,6 +63,7 @@ public class ProjectMetaCodec implements Codec<ProjectMetadata> {
         String origin = "";
         String projectName = "";
         String projectDir = "";
+        String projectOwner = null;
 
         bsonReader.readStartDocument();
         while (bsonReader.readBsonType() != BsonType.END_OF_DOCUMENT) {
@@ -81,6 +82,9 @@ public class ProjectMetaCodec implements Codec<ProjectMetadata> {
                 case "projectName":
                     projectName = bsonReader.readString();
                     break;
+                case "projectOwner":
+                    projectOwner = bsonReader.readString();
+                    break;
                 case "projectDir":
                     projectDir = bsonReader.readString();
                     break;
@@ -96,6 +100,7 @@ public class ProjectMetaCodec implements Codec<ProjectMetadata> {
 
         ProjectMetadata p = factory.create(id, origin, projectName)
                 .setProjectDir(projectDir)
+                .setProjectOwner(projectOwner)
                 .setKeysets(keysetList);
         keysetList.forEach(m -> m.setProjectRoot(p.getProjectDir()));
         return p;
@@ -111,8 +116,10 @@ public class ProjectMetaCodec implements Codec<ProjectMetadata> {
         } else {
             bsonWriter.writeObjectId(new ObjectId());
         }
-        bsonWriter.writeName("_user");
-        bsonWriter.writeString(details.getUser().block()); // this is bad :(
+        projectMetadata.getProjectOwner().ifPresent(owner -> {
+            bsonWriter.writeName("projectOwner");
+            bsonWriter.writeString(owner);
+        });
         bsonWriter.writeName("origin");
         bsonWriter.writeString(projectMetadata.getOrigin());
         bsonWriter.writeName("projectName");

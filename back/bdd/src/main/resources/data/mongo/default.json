@@ -1,5 +1,5 @@
 {
-  "_user": "test_user",
+  "projectOwner": "test_user",
   "origin" : "FIXME",
   "projectName" : "default",
   "projectDir" : "default",
