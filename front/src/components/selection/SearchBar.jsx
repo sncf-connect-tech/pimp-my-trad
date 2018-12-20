@@ -16,9 +16,10 @@
  *
  */
 import * as React from 'react';
-import { connect } from 'react-redux';
-import { Input, InputGroup, InputGroupAddon, Button } from 'reactstrap';
-import { filterState, searchKey } from '../../app/actions/ProjectAction';
+import {connect} from 'react-redux';
+import {Input, InputGroup, InputGroupAddon, Button} from 'reactstrap';
+import {filterState, searchKey} from '../../app/actions/ProjectAction';
+
 const mapState = state => ({
     query: state.main.search,
     stateFiltered: state.main.state != null
@@ -27,18 +28,21 @@ const mapDispatch = dispatch => ({
     search: query => dispatch(searchKey(query)),
     resetFilter: () => dispatch(filterState(null))
 });
+
 class _SearchBar extends React.Component {
     search(event) {
         this.props.search(event.currentTarget.value);
     }
+
     render() {
         return (<InputGroup>
-                <Input type="text" onChange={e => this.search(e)} value={this.props.query} placeholder="Rechercher..."/>
-                {this.props.stateFiltered ?
-            (<InputGroupAddon addonType="append">
-                        <Button onClick={() => this.props.resetFilter()}>Tous les états</Button>
-                    </InputGroupAddon>) : ''}
-            </InputGroup>);
+            <Input type="text" onChange={e => this.search(e)} value={this.props.query} placeholder="Rechercher..."/>
+            {this.props.stateFiltered ?
+                (<InputGroupAddon addonType="append">
+                    <Button onClick={() => this.props.resetFilter()}>Tous les états</Button>
+                </InputGroupAddon>) : ''}
+        </InputGroup>);
     }
 }
+
 export const SearchBar = connect(mapState, mapDispatch)(_SearchBar);

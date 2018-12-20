@@ -20,6 +20,7 @@ export var Error;
     Error["UNAUTHORIZED"] = "UNAUTHORIZED";
     Error["UNEXPECTED_BODY"] = "UNEXPECTED_BODY";
 })(Error || (Error = {}));
+
 export function rejectHttpErrors(res) {
     if (res.status < 400) {
         return Promise.resolve(res);
@@ -31,13 +32,16 @@ export function rejectHttpErrors(res) {
     else {
         return res.json()
             .then(err => Promise.reject(err))
-            .catch(err => Promise.reject({ error: Error.UNEXPECTED_BODY }));
+            .catch(err => Promise.reject({error: Error.UNEXPECTED_BODY}));
     }
 }
+
 export function authHeaders() {
-    return Promise.resolve({ 'Authorization': `Basic ${localStorage.getItem('pmt') || ''}` });
+    return Promise.resolve({'Authorization': `Basic ${localStorage.getItem('pmt') || ''}`});
 }
-export const and = (p) => (result) => p.then(second => ({ ...result, ...second }));
+
+export const and = (p) => (result) => p.then(second => ({...result, ...second}));
+
 export function jsonHeaders() {
-    return Promise.resolve({ 'Content-Type': 'application/json' });
+    return Promise.resolve({'Content-Type': 'application/json'});
 }

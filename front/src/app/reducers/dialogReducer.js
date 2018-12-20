@@ -15,7 +15,8 @@
  *  * limitations under the License.
  *
  */
-import { DialogAction } from '../actions/DialogAction';
+import {DialogAction} from '../actions/DialogAction';
+
 export const dialogStateDefaults = {
     addProject: false,
     addKey: false,
@@ -24,7 +25,7 @@ export const dialogStateDefaults = {
     importTranslations: false
 };
 export const dialogReducer = (state, action) => {
-    state = { ...dialogStateDefaults, ...state };
+    state = {...dialogStateDefaults, ...state};
     switch (action.type) {
         case DialogAction.SHOW_ADD_PROJECT:
             return {

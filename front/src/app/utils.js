@@ -18,27 +18,34 @@
 export function safeGet(o, key, def) {
     return safeGetter(key, def)(o);
 }
+
 export function safeGetter(key, def) {
     return o => o == null ? def : (o[key] || def);
 }
+
 export function objectValues(o) {
     return Object.keys(o).map(k => o[k]);
 }
+
 export function flatten(arr) {
     return flattener()(arr);
 }
+
 export function flattener() {
     return arr => arr.reduce((acc, cur) => acc.concat(cur), []);
 }
+
 export function peek(v) {
     return peeker()(v);
 }
+
 export function peeker() {
     return value => {
         console.log(value);
         return value;
     };
 }
+
 export function timeout(ms) {
     return new Promise(resolve => {
         setTimeout(resolve, ms);

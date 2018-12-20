@@ -16,11 +16,12 @@
  *
  */
 import * as React from 'react';
-import { connect } from 'react-redux';
-import { ListGroup, ListGroupItem, Badge } from 'reactstrap';
-import { selectAll, selectProject } from '../../app/actions/ProjectAction';
-import { browseProject, browseProjectFiles, resetSelection } from '../../app/actions/FileAction';
-import { showAddProject } from '../../app/actions/DialogAction';
+import {connect} from 'react-redux';
+import {ListGroup, ListGroupItem, Badge} from 'reactstrap';
+import {selectAll, selectProject} from '../../app/actions/ProjectAction';
+import {browseProject, browseProjectFiles, resetSelection} from '../../app/actions/FileAction';
+import {showAddProject} from '../../app/actions/DialogAction';
+
 const mapState = state => ({
     projects: state.main.projects,
     selection: state.main.selected,
@@ -36,25 +37,30 @@ const mapDispatch = dispatch => ({
     toggleAll: () => Promise.resolve(dispatch(selectAll()))
         .then(_ => dispatch(browseProject(null)))
 });
+
 class _ProjectNavigation extends React.Component {
     render() {
         return (<ListGroup>
-                {this.props.projects.map((p, i) => (<ListGroupItem action tag="a" href="#" key={p.name} className={i === 0 ? 'border-top-0' : ''} active={p.name === this.props.selection && !this.props.all} onClick={() => this.props.select(p.name)}>
-                        {p.name}
-                    </ListGroupItem>))}
-                <ListGroupItem action tag="a" href="#" onClick={() => this.props.toggleAll()} active={this.props.all}>
-                    <Badge pill color={this.props.all ? 'light' : 'primary'} className="pt-0">
-                        <h5 className="m-0">...</h5>
-                    </Badge>
-                    <span className="ml-2">Tous les projets</span>
-                </ListGroupItem>
-                <ListGroupItem className="" action tag="a" href="#" onClick={() => this.props.addProject()}>
-                    <Badge pill color="primary" className="pt-0">
-                        <h5 className="m-0">+</h5>
-                    </Badge>
-                    <span className="ml-2">Importer un projet</span>
-                </ListGroupItem>
-            </ListGroup>);
+            {this.props.projects.map((p, i) => (
+                <ListGroupItem action tag="a" href="#" key={p.name} className={i === 0 ? 'border-top-0' : ''}
+                               active={p.name === this.props.selection && !this.props.all}
+                               onClick={() => this.props.select(p.name)}>
+                    {p.name}
+                </ListGroupItem>))}
+            <ListGroupItem action tag="a" href="#" onClick={() => this.props.toggleAll()} active={this.props.all}>
+                <Badge pill color={this.props.all ? 'light' : 'primary'} className="pt-0">
+                    <h5 className="m-0">...</h5>
+                </Badge>
+                <span className="ml-2">Tous les projets</span>
+            </ListGroupItem>
+            <ListGroupItem className="" action tag="a" href="#" onClick={() => this.props.addProject()}>
+                <Badge pill color="primary" className="pt-0">
+                    <h5 className="m-0">+</h5>
+                </Badge>
+                <span className="ml-2">Importer un projet</span>
+            </ListGroupItem>
+        </ListGroup>);
     }
 }
+
 export const ProjectNavigation = connect(mapState, mapDispatch)(_ProjectNavigation);

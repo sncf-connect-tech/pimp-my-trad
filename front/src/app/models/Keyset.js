@@ -22,32 +22,39 @@ export class Keyset {
             keys: keydictFrom(object.keys)
         });
     }
+
     setKey(id, key) {
         return Keyset.from({
             name: this.name,
             supportedLanguages: this.supportedLanguages,
-            keys: { ...this.keys, [id]: key },
+            keys: {...this.keys, [id]: key},
             id: this.id
         });
     }
+
     pairs() {
         return Object.keys(this.keys).map(id => [id, this.keys[id]]);
     }
+
     keyIds() {
         return Object.keys(this.keys);
     }
 }
+
 export class Key {
     static from(object) {
         return Object.assign(new Key(), object);
     }
+
     translation(key) {
         return (this.translations[key] || [])[0];
     }
+
     conflicting(key) {
         return (this.translations[key] || [])[1] || null;
     }
 }
+
 function keydictFrom(object) {
     return Object.keys(object).reduce((final, id) => {
         final[id] = Key.from(object[id]);

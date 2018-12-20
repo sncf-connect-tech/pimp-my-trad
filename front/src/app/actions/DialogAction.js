@@ -24,31 +24,37 @@ export var DialogAction;
     DialogAction["SHOW_SYNC_DIALOG"] = "SHOW_SYNC_DIALOG";
     DialogAction["SHOW_IMPORT_DIALOG"] = "SHOW_IMPORT_DIALOG";
 })(DialogAction || (DialogAction = {}));
+
 export function showAddProject() {
     return {
         type: DialogAction.SHOW_ADD_PROJECT
     };
 }
+
 export function showAddKey() {
     return {
         type: DialogAction.SHOW_ADD_KEY
     };
 }
+
 export function showAddLang() {
     return {
         type: DialogAction.SHOW_ADD_LANG
     };
 }
+
 export function showSyncDialog() {
     return {
         type: DialogAction.SHOW_SYNC_DIALOG
     };
 }
+
 export function showImportDialog() {
     return {
         type: DialogAction.SHOW_IMPORT_DIALOG
     };
 }
+
 export function closeDialog() {
     return {
         type: DialogAction.CLOSE_ANY

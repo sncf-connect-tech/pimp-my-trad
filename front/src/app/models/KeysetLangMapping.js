@@ -22,9 +22,11 @@ export class KeysetLangMapping {
         this.files = files;
         this.languages = languages;
     }
+
     static empty() {
         return new KeysetLangMapping([], []);
     }
+
     addFile(path, lang) {
         let index = this.fileIndex(path);
         if (index > -1) {
@@ -34,6 +36,7 @@ export class KeysetLangMapping {
             return new KeysetLangMapping(this.files.concat(path), this.languages.concat(lang));
         }
     }
+
     removeFile(path) {
         let index = this.fileIndex(path);
         if (index > -1) {
@@ -41,20 +44,25 @@ export class KeysetLangMapping {
         }
         return this;
     }
+
     toggleFile(path) {
         let index = this.fileIndex(path);
         return index > -1 ? this.removeFile(path) : this.addFile(path, null);
     }
+
     fileCount() {
         return this.files.length;
     }
+
     isPresent(path) {
         return this.fileIndex(path) > -1;
     }
+
     getLanguage(path) {
         let index = this.files.indexOf(path);
         return index > -1 ? this.languages[index] : null;
     }
+
     toObject() {
         return this.languages.reduce((acc, lang, index) => {
             if (lang != null) {
@@ -63,10 +71,12 @@ export class KeysetLangMapping {
             return acc;
         }, {});
     }
+
     fileIndex(path) {
         return this.files.indexOf(path);
     }
 }
+
 export var Language;
 (function (Language) {
     Language["French"] = "FR";
@@ -75,6 +85,7 @@ export var Language;
     Language["German"] = "DE";
     Language["Italian"] = "IT";
 })(Language || (Language = {}));
+
 export function getPrettyLanguage(lang) {
     switch (lang) {
         case Language.French:

@@ -15,15 +15,16 @@
  *  * limitations under the License.
  *
  */
-import { FileAction } from '../actions/FileAction';
-import { KeysetLangMapping } from '../models/KeysetLangMapping';
+import {FileAction} from '../actions/FileAction';
+import {KeysetLangMapping} from '../models/KeysetLangMapping';
+
 export const fileBrowserStateDefaults = {
     files: [],
     workingDir: '/',
     selected: KeysetLangMapping.empty()
 };
 export const fileBrowserReducer = (state, action) => {
-    state = { ...fileBrowserStateDefaults, ...state };
+    state = {...fileBrowserStateDefaults, ...state};
     switch (action.type) {
         case FileAction.BROWSE:
             return {

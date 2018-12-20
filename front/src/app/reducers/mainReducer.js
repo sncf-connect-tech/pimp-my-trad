@@ -15,8 +15,9 @@
  *  * limitations under the License.
  *
  */
-import { ProjectAction } from '../actions/ProjectAction';
-import { UIAction } from '../actions/UIAction';
+import {ProjectAction} from '../actions/ProjectAction';
+import {UIAction} from '../actions/UIAction';
+
 export const mainStateDefaults = {
     projects: [],
     selected: null,
@@ -28,7 +29,7 @@ export const mainStateDefaults = {
     loading: 0
 };
 export const mainReducer = (state, action) => {
-    state = { ...mainStateDefaults, ...state };
+    state = {...mainStateDefaults, ...state};
     switch (action.type) {
         case ProjectAction.ADD_PROJECT:
             return {
@@ -62,7 +63,7 @@ export const mainReducer = (state, action) => {
                 ...state,
                 projects: state.projects
                     .map(p => action.keysets
-                    .reduce((finalProject, keyset) => p.setKeyset(keyset, false), p))
+                        .reduce((finalProject, keyset) => p.setKeyset(keyset, false), p))
             };
         case ProjectAction.SET_KEY:
             return {

@@ -15,15 +15,16 @@
  *  * limitations under the License.
  *
  */
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 import * as React from 'react';
-import { Card, CardBody, CardTitle, Badge, CardText, UncontrolledDropdown } from 'reactstrap';
-import { addSelectedFiles, createKeyset } from '../../app/actions/ProjectAction';
-import { resetSelection } from '../../app/actions/FileAction';
+import {Card, CardBody, CardTitle, Badge, CardText, UncontrolledDropdown} from 'reactstrap';
+import {addSelectedFiles, createKeyset} from '../../app/actions/ProjectAction';
+import {resetSelection} from '../../app/actions/FileAction';
 import DropdownToggle from 'reactstrap/lib/DropdownToggle';
 import DropdownMenu from 'reactstrap/lib/DropdownMenu';
 import DropdownItem from 'reactstrap/lib/DropdownItem';
-import { notify } from '../../app/actions/UIAction';
+import {notify} from '../../app/actions/UIAction';
+
 const mapState = state => ({
     selected: state.selection.selected,
     keysets: state.main.projects
@@ -39,29 +40,33 @@ const mapDispatch = dispatch => ({
         .then(_ => dispatch(resetSelection()))
         .then(_ => dispatch(notify('Clés ajoutées avec succès!')))
 });
+
 class _KeysetAssistant extends React.Component {
     selectCount() {
         return this.props.selected.fileCount();
     }
+
     render() {
         return (<Card>
-                <CardBody>
-                    <CardTitle>Sélection <Badge pill>{this.selectCount()}</Badge></CardTitle>
-                    <CardText>Sélectionner des fichiers à grouper.</CardText>
-                    <UncontrolledDropdown className="d-inline-block">
-                        <DropdownToggle disabled={this.selectCount() === 0} caret>Ajouter à...</DropdownToggle>
-                        <DropdownMenu>
-                            <DropdownItem onClick={() => this.props.createKeyset()}>
-                                Nouveau jeu de clés
-                            </DropdownItem>
-                            {this.props.keysets.length > 0 ? <DropdownItem divider/> : ''}
-                            {this.props.keysets.map((k, i) => <DropdownItem key={i} onClick={() => this.props.addFiles(k.id)}>
-                                    {k.name}
-                                </DropdownItem>)}
-                        </DropdownMenu>
-                    </UncontrolledDropdown>
-                </CardBody>
-            </Card>);
+            <CardBody>
+                <CardTitle>Sélection <Badge pill>{this.selectCount()}</Badge></CardTitle>
+                <CardText>Sélectionner des fichiers à grouper.</CardText>
+                <UncontrolledDropdown className="d-inline-block">
+                    <DropdownToggle disabled={this.selectCount() === 0} caret>Ajouter à...</DropdownToggle>
+                    <DropdownMenu>
+                        <DropdownItem onClick={() => this.props.createKeyset()}>
+                            Nouveau jeu de clés
+                        </DropdownItem>
+                        {this.props.keysets.length > 0 ? <DropdownItem divider/> : ''}
+                        {this.props.keysets.map((k, i) => <DropdownItem key={i}
+                                                                        onClick={() => this.props.addFiles(k.id)}>
+                            {k.name}
+                        </DropdownItem>)}
+                    </DropdownMenu>
+                </UncontrolledDropdown>
+            </CardBody>
+        </Card>);
     }
 }
+
 export const KeysetAssistant = connect(mapState, mapDispatch)(_KeysetAssistant);

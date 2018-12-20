@@ -16,10 +16,11 @@
  *
  */
 import * as React from 'react';
-import { Navbar, NavbarBrand, NavItem, Fade, Nav, NavLink } from 'reactstrap';
-import { connect } from 'react-redux';
-import { showSyncDialog } from '../../app/actions/DialogAction';
-import { setTab } from '../../app/actions/UIAction';
+import {Navbar, NavbarBrand, NavItem, Fade, Nav, NavLink} from 'reactstrap';
+import {connect} from 'react-redux';
+import {showSyncDialog} from '../../app/actions/DialogAction';
+import {setTab} from '../../app/actions/UIAction';
+
 const mapState = state => ({
     tab: state.main.tab,
     notification: state.main.notification
@@ -30,26 +31,30 @@ const mapDispatch = dispatch => ({
 });
 const SetTabItem = (props) => {
     return (<NavItem className="mx-1">
-            <NavLink className="px-3" onClick={() => props.select(props.tab)} href="#" active={props.current === props.tab}>{props.children}</NavLink>
-        </NavItem>);
+        <NavLink className="px-3" onClick={() => props.select(props.tab)} href="#"
+                 active={props.current === props.tab}>{props.children}</NavLink>
+    </NavItem>);
 };
+
 class _Header extends React.Component {
     render() {
         return (<Navbar color="dark" dark expand="xs" className="p-3 flex-no-shrink">
-                {this.props.notification === null ?
-            <Fade key={0}><NavbarBrand href="#" className="lead">pimp my trad.</NavbarBrand></Fade> :
-            <Fade key={1}>
-                            <p className="text-success my-2">{`\u2713 ${this.props.notification}`}</p>
-                        </Fade>}
-                <Nav className="ml-auto" navbar pills>
-                    <SetTabItem select={this.props.selectTab} current={this.props.tab} tab={0}>Parcourir les clés</SetTabItem>
-                    <SetTabItem select={this.props.selectTab} current={this.props.tab} tab={1}>Fichiers</SetTabItem>
-                    <SetTabItem select={this.props.selectTab} current={this.props.tab} tab={2}>Export et import</SetTabItem>
-                    <NavItem className="mx-1">
-                        <NavLink className="px-3" href="#" onClick={() => this.props.showSync()}>Synchroniser</NavLink>
-                    </NavItem>
-                </Nav>
-            </Navbar>);
+            {this.props.notification === null ?
+                <Fade key={0}><NavbarBrand href="#" className="lead">pimp my trad.</NavbarBrand></Fade> :
+                <Fade key={1}>
+                    <p className="text-success my-2">{`\u2713 ${this.props.notification}`}</p>
+                </Fade>}
+            <Nav className="ml-auto" navbar pills>
+                <SetTabItem select={this.props.selectTab} current={this.props.tab} tab={0}>Parcourir les
+                    clés</SetTabItem>
+                <SetTabItem select={this.props.selectTab} current={this.props.tab} tab={1}>Fichiers</SetTabItem>
+                <SetTabItem select={this.props.selectTab} current={this.props.tab} tab={2}>Export et import</SetTabItem>
+                <NavItem className="mx-1">
+                    <NavLink className="px-3" href="#" onClick={() => this.props.showSync()}>Synchroniser</NavLink>
+                </NavItem>
+            </Nav>
+        </Navbar>);
     }
 }
+
 export const Header = connect(mapState, mapDispatch)(_Header);

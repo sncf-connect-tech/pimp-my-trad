@@ -16,20 +16,21 @@
  *
  */
 import * as React from 'react';
-import { Col, Progress, Row } from 'reactstrap';
-import { Header } from './main/Header';
-import { ProjectNavigation } from './main/ProjectNavigation';
-import { Tools } from './selection/Tools';
-import { Selection } from './selection/Selection';
-import { AddProjectModal } from './main/AddProjectModal';
-import { AddKeyModal } from './main/AddKeyModal';
-import { AddLangModal } from './main/AddLangModal';
-import { SyncModal } from './main/SyncModal';
-import { ImportTranslationsModal } from './main/ImportTranslationsModal';
-import { connect } from 'react-redux';
-import { getProjects } from '../app/actions/ProjectAction';
-import { Login } from './Login';
-import { checkAuth } from '../app/actions/AuthAction';
+import {Col, Progress, Row} from 'reactstrap';
+import {Header} from './main/Header';
+import {ProjectNavigation} from './main/ProjectNavigation';
+import {Tools} from './selection/Tools';
+import {Selection} from './selection/Selection';
+import {AddProjectModal} from './main/AddProjectModal';
+import {AddKeyModal} from './main/AddKeyModal';
+import {AddLangModal} from './main/AddLangModal';
+import {SyncModal} from './main/SyncModal';
+import {ImportTranslationsModal} from './main/ImportTranslationsModal';
+import {connect} from 'react-redux';
+import {getProjects} from '../app/actions/ProjectAction';
+import {Login} from './Login';
+import {checkAuth} from '../app/actions/AuthAction';
+
 const mapStateToProps = state => ({
     auth: state.auth.auth,
     loading: state.main.loading > 0
@@ -38,40 +39,44 @@ const mapDispatchToProps = dispatch => ({
     getProjects: () => dispatch(getProjects()),
     login: (user, password) => dispatch(checkAuth(user, password))
 });
+
 class _App extends React.Component {
     componentDidMount() {
         if (this.props.auth) {
             this.props.getProjects();
         }
     }
+
     componentWillReceiveProps(props) {
         if (!this.props.auth && props.auth) {
             this.props.getProjects();
         }
     }
+
     render() {
         return (<div>
-                <Header />
-                <Progress className="loading" value={this.props.loading ? 0 : 100}/>
-                <Row className="flex-grow">
-                    <Col md={2} className="sidebar">
-                        <div className="sticky-top">
-                            <ProjectNavigation />
-                            <Tools />
-                        </div>
-                    </Col>
-                    <Col md={10} className="p-4 scroll-y">
-                        <Selection tab={0}/>
-                    </Col>
-                </Row>
-                <Login auth={this.props.auth} login={this.props.login}/>
-                <AddProjectModal />
-                <AddKeyModal />
-                <AddLangModal />
-                <SyncModal />
-                <ImportTranslationsModal />
-            </div>);
+            <Header/>
+            <Progress className="loading" value={this.props.loading ? 0 : 100}/>
+            <Row className="flex-grow">
+                <Col md={2} className="sidebar">
+                    <div className="sticky-top">
+                        <ProjectNavigation/>
+                        <Tools/>
+                    </div>
+                </Col>
+                <Col md={10} className="p-4 scroll-y">
+                    <Selection tab={0}/>
+                </Col>
+            </Row>
+            <Login auth={this.props.auth} login={this.props.login}/>
+            <AddProjectModal/>
+            <AddKeyModal/>
+            <AddLangModal/>
+            <SyncModal/>
+            <ImportTranslationsModal/>
+        </div>);
     }
 }
+
 const App = connect(mapStateToProps, mapDispatchToProps)(_App);
 export default App;

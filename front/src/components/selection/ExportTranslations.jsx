@@ -16,10 +16,11 @@
  *
  */
 import * as React from 'react';
-import { connect } from 'react-redux';
-import { blobFrom } from '../../app/models/ExportDetails';
-import { exportSelectedProject } from '../../app/actions/ImportExportAction';
-import { Card, CardBody, CardTitle, CardText, Button } from 'reactstrap';
+import {connect} from 'react-redux';
+import {blobFrom} from '../../app/models/ExportDetails';
+import {exportSelectedProject} from '../../app/actions/ImportExportAction';
+import {Card, CardBody, CardTitle, CardText, Button} from 'reactstrap';
+
 const mapState = state => ({
     exported: state.importsExports.exported,
     projectName: state.main.selected
@@ -27,15 +28,18 @@ const mapState = state => ({
 const mapDispatch = dispatch => ({
     exportSelected: () => dispatch(exportSelectedProject())
 });
+
 class _ExportTranslations extends React.Component {
     exported() {
         return this.props.exported !== null;
     }
+
     exportButton() {
         return (<Button color="secondary" size="lg" onClick={() => this.props.exportSelected()}>
-                Exporter {this.props.projectName === null ? 'tout' : `"${this.props.projectName}"`}
-            </Button>);
+            Exporter {this.props.projectName === null ? 'tout' : `"${this.props.projectName}"`}
+        </Button>);
     }
+
     downloadButton() {
         if (this.props.exported === null) {
             return '';
@@ -43,22 +47,24 @@ class _ExportTranslations extends React.Component {
         let id = this.props.exported.metadata.exportId.toUpperCase();
         let href = blobFrom(this.props.exported);
         return (<Button color="primary" size="lg" href={href} download={`export_${id}.csv`}>
-                {`Export ${id}`}
-            </Button>);
+            {`Export ${id}`}
+        </Button>);
     }
+
     render() {
         return (<Card>
-                <CardBody>
-                    <CardTitle>Exporter</CardTitle>
-                    <CardText>
-                        Les clés à traduire seront exportées dans un fichier CSV.<br />
-                        <b>N'oubliez pas de noter le numéro d'export!</b>
-                    </CardText>
-                    <p className="text-center">
-                        {this.exported() ? this.downloadButton() : this.exportButton()}
-                    </p>
-                </CardBody>
-            </Card>);
+            <CardBody>
+                <CardTitle>Exporter</CardTitle>
+                <CardText>
+                    Les clés à traduire seront exportées dans un fichier CSV.<br/>
+                    <b>N'oubliez pas de noter le numéro d'export!</b>
+                </CardText>
+                <p className="text-center">
+                    {this.exported() ? this.downloadButton() : this.exportButton()}
+                </p>
+            </CardBody>
+        </Card>);
     }
 }
+
 export const ExportTranslations = connect(mapState, mapDispatch)(_ExportTranslations);

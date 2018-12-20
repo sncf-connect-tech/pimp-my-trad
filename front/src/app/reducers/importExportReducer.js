@@ -15,14 +15,15 @@
  *  * limitations under the License.
  *
  */
-import { ImportExportAction } from '../actions/ImportExportAction';
+import {ImportExportAction} from '../actions/ImportExportAction';
+
 export const importExportStateDefaults = {
     exported: null,
     allExports: [],
     selectedExport: null
 };
 export const importExportReducer = (state, action) => {
-    state = { ...importExportStateDefaults, ...state };
+    state = {...importExportStateDefaults, ...state};
     switch (action.type) {
         case ImportExportAction.EXPORT_PROJECT:
             return {

@@ -15,13 +15,14 @@
  *  * limitations under the License.
  *
  */
-import { applyMiddleware, combineReducers, compose, createStore } from 'redux';
-import { mainReducer, mainStateDefaults } from './reducers/mainReducer';
+import {applyMiddleware, combineReducers, compose, createStore} from 'redux';
+import {mainReducer, mainStateDefaults} from './reducers/mainReducer';
 import thunk from 'redux-thunk';
-import { fileBrowserReducer, fileBrowserStateDefaults } from './reducers/fileBrowserReducer';
-import { dialogReducer, dialogStateDefaults } from './reducers/dialogReducer';
-import { importExportReducer, importExportStateDefaults } from './reducers/importExportReducer';
-import { authReducer, authStateDefaults } from './reducers/authReducer';
+import {fileBrowserReducer, fileBrowserStateDefaults} from './reducers/fileBrowserReducer';
+import {dialogReducer, dialogStateDefaults} from './reducers/dialogReducer';
+import {importExportReducer, importExportStateDefaults} from './reducers/importExportReducer';
+import {authReducer, authStateDefaults} from './reducers/authReducer';
+
 export const defaultState = {
     main: mainStateDefaults,
     selection: fileBrowserStateDefaults,
@@ -30,6 +31,7 @@ export const defaultState = {
     location: window.location,
     auth: authStateDefaults
 };
+
 export function createAppStore(bootState = {}) {
     // tslint:disable-next-line
     let composeEnhancers = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
@@ -39,7 +41,7 @@ export function createAppStore(bootState = {}) {
         dialogs: dialogReducer,
         importsExports: importExportReducer,
         auth: authReducer,
-        location: (s, a) => ({ ...window.location, ...s })
+        location: (s, a) => ({...window.location, ...s})
     });
     return createStore(reducer, Object.assign({}, defaultState, bootState), composeEnhancers(applyMiddleware(thunk)));
 }

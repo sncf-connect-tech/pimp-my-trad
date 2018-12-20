@@ -15,12 +15,13 @@
  *  * limitations under the License.
  *
  */
-import { connect } from 'react-redux';
-import { syncAll } from '../../app/actions/ProjectAction';
-import { closeDialog } from '../../app/actions/DialogAction';
-import { Modal, ModalHeader, ModalFooter, ModalBody, Button } from 'reactstrap';
+import {connect} from 'react-redux';
+import {syncAll} from '../../app/actions/ProjectAction';
+import {closeDialog} from '../../app/actions/DialogAction';
+import {Modal, ModalHeader, ModalFooter, ModalBody, Button} from 'reactstrap';
 import * as React from 'react';
-import { allKeysets } from '../../app/models/Project';
+import {allKeysets} from '../../app/models/Project';
+
 const mapState = state => ({
     show: state.dialogs.sync,
     conflict: allKeysets(state.main.projects)
@@ -33,25 +34,27 @@ const mapDispatch = dispatch => ({
     syncAll: () => dispatch(syncAll()),
     hide: () => dispatch(closeDialog())
 });
+
 class _SyncModal extends React.Component {
     render() {
         return (<Modal fade={true} isOpen={this.props.show} toggle={() => this.props.hide()}>
-                <ModalHeader>Synchroniser les changements</ModalHeader>
-                <ModalBody>
-                    {this.props.conflict.length <= 0 ?
-            <div>Les modifications seront poussées.</div> :
-            <div>
-                            Les clés suivantes sont en conflit avec une autre contribution :
-                            <ul>{this.props.conflict.map(id => <li key={id}>{id}</li>)}</ul>
-                            Annulez pour corriger les clés.<br />
-                            <b>Si vous synchronisez à nouveau, votre version sera utilisée.</b>
-                        </div>}
-                </ModalBody>
-                <ModalFooter>
-                    <Button color="primary" onClick={() => this.props.syncAll()}>Synchroniser</Button>{' '}
-                    <Button color="secondary" onClick={this.props.hide}>Annuler</Button>
-                </ModalFooter>
-            </Modal>);
+            <ModalHeader>Synchroniser les changements</ModalHeader>
+            <ModalBody>
+                {this.props.conflict.length <= 0 ?
+                    <div>Les modifications seront poussées.</div> :
+                    <div>
+                        Les clés suivantes sont en conflit avec une autre contribution :
+                        <ul>{this.props.conflict.map(id => <li key={id}>{id}</li>)}</ul>
+                        Annulez pour corriger les clés.<br/>
+                        <b>Si vous synchronisez à nouveau, votre version sera utilisée.</b>
+                    </div>}
+            </ModalBody>
+            <ModalFooter>
+                <Button color="primary" onClick={() => this.props.syncAll()}>Synchroniser</Button>{' '}
+                <Button color="secondary" onClick={this.props.hide}>Annuler</Button>
+            </ModalFooter>
+        </Modal>);
     }
 }
+
 export const SyncModal = connect(mapState, mapDispatch)(_SyncModal);

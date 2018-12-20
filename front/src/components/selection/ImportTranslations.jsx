@@ -16,9 +16,10 @@
  *
  */
 import * as React from 'react';
-import { connect } from 'react-redux';
-import { showRecentExports, startImport } from '../../app/actions/ImportExportAction';
-import { ListGroup, ListGroupItem, ListGroupItemHeading, ListGroupItemText, Row, Col, Button } from 'reactstrap';
+import {connect} from 'react-redux';
+import {showRecentExports, startImport} from '../../app/actions/ImportExportAction';
+import {ListGroup, ListGroupItem, ListGroupItemHeading, ListGroupItemText, Row, Col, Button} from 'reactstrap';
+
 const mapState = state => ({
     recent: state.importsExports.allExports,
     auth: state.auth.auth
@@ -27,37 +28,41 @@ const mapDispatch = dispatch => ({
     loadRecent: () => dispatch(showRecentExports()),
     showImportDialog: id => dispatch(startImport(id))
 });
+
 class _ImportTranslations extends React.Component {
     componentDidMount() {
         if (this.props.auth) {
             this.props.loadRecent();
         }
     }
+
     componentWillReceiveProps(props) {
         if (!this.props.auth && props.auth) {
             this.props.loadRecent();
         }
     }
+
     render() {
         return (<ListGroup>
-                {this.props.recent.reverse().map(meta => (<ListGroupItem key={meta.exportId}>
-                        <Row className="align-items-center">
-                            <Col md={10}>
-                                <ListGroupItemHeading>
-                                    {meta.exportId.toUpperCase()}
-                                </ListGroupItemHeading>
-                                <ListGroupItemText>
-                                    {new Date(meta.timestamp).toLocaleDateString('fr-FR', {
-            weekday: 'long', month: 'long', day: 'numeric'
-        })}
-                                </ListGroupItemText>
-                            </Col>
-                            <Col md={2}>
-                                <Button onClick={() => this.props.showImportDialog(meta.exportId)}>Importer</Button>
-                            </Col>
-                        </Row>
-                    </ListGroupItem>))}
-            </ListGroup>);
+            {this.props.recent.reverse().map(meta => (<ListGroupItem key={meta.exportId}>
+                <Row className="align-items-center">
+                    <Col md={10}>
+                        <ListGroupItemHeading>
+                            {meta.exportId.toUpperCase()}
+                        </ListGroupItemHeading>
+                        <ListGroupItemText>
+                            {new Date(meta.timestamp).toLocaleDateString('fr-FR', {
+                                weekday: 'long', month: 'long', day: 'numeric'
+                            })}
+                        </ListGroupItemText>
+                    </Col>
+                    <Col md={2}>
+                        <Button onClick={() => this.props.showImportDialog(meta.exportId)}>Importer</Button>
+                    </Col>
+                </Row>
+            </ListGroupItem>))}
+        </ListGroup>);
     }
 }
+
 export const ImportTranslations = connect(mapState, mapDispatch)(_ImportTranslations);

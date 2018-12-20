@@ -16,11 +16,12 @@
  *
  */
 import * as React from 'react';
-import { Provider } from 'react-redux';
-import { createAppStore } from './app/createAppStore';
-import { mainStateDefaults } from './app/reducers/mainReducer';
-import { Project } from './app/models/Project';
+import {Provider} from 'react-redux';
+import {createAppStore} from './app/createAppStore';
+import {mainStateDefaults} from './app/reducers/mainReducer';
+import {Project} from './app/models/Project';
 import App from './components/App';
+
 let store;
 let saved = localStorage.getItem('pmt_main');
 if (saved !== null) {
@@ -30,7 +31,7 @@ if (saved !== null) {
         ...parsed,
         projects: parsed.projects.map((p) => Project.from(p))
     };
-    store = createAppStore({ main });
+    store = createAppStore({main});
 }
 else {
     store = createAppStore();
@@ -38,11 +39,13 @@ else {
 store.subscribe(() => {
     localStorage.setItem('pmt_main', JSON.stringify(store.getState().main));
 });
+
 class Root extends React.Component {
     render() {
         return (<Provider store={store}>
-                <App />
-            </Provider>);
+            <App/>
+        </Provider>);
     }
 }
+
 export default Root;

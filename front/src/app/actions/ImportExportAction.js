@@ -15,10 +15,11 @@
  *  * limitations under the License.
  *
  */
-import { projectService } from '../services/ProjectService';
-import { closeDialog, showImportDialog } from './DialogAction';
-import { updateKeysets } from './ProjectAction';
-import { loadingDone, setLoading } from './UIAction';
+import {projectService} from '../services/ProjectService';
+import {closeDialog, showImportDialog} from './DialogAction';
+import {updateKeysets} from './ProjectAction';
+import {loadingDone, setLoading} from './UIAction';
+
 export var ImportExportAction;
 (function (ImportExportAction) {
     ImportExportAction["ERROR"] = "ERROR";
@@ -26,6 +27,7 @@ export var ImportExportAction;
     ImportExportAction["SET_EXPORTS"] = "SET_EXPORTS";
     ImportExportAction["IMPORT_TRANSLATIONS"] = "IMPORT_TRANSLATIONS";
 })(ImportExportAction || (ImportExportAction = {}));
+
 export function exportSelectedProject() {
     return (dispatch, getState) => {
         let projectName = getState().main.selected;
@@ -33,23 +35,25 @@ export function exportSelectedProject() {
         let promise = projectName === null ? projectService.exportAll() : projectService.exportProject(projectName);
         return promise
             .then(exported => dispatch({
-            type: ImportExportAction.EXPORT_PROJECT,
-            exported
-        }))
+                type: ImportExportAction.EXPORT_PROJECT,
+                exported
+            }))
             .then(loadingDone(dispatch));
     };
 }
+
 export function showRecentExports() {
     return dispatch => {
         dispatch(setLoading(true));
         return projectService.recentExports()
             .then(res => dispatch({
-            type: ImportExportAction.SET_EXPORTS,
-            exports: res
-        }))
+                type: ImportExportAction.SET_EXPORTS,
+                exports: res
+            }))
             .then(loadingDone(dispatch));
     };
 }
+
 export function startImport(exportId) {
     return dispatch => {
         dispatch({
@@ -60,17 +64,18 @@ export function startImport(exportId) {
         return Promise.resolve();
     };
 }
+
 export function completeImport(language, file) {
     return (dispatch, getState) => {
         dispatch(setLoading(true));
         let id = getState().importsExports.selectedExport;
         return id === null ?
-            Promise.resolve(dispatch({ type: ImportExportAction.ERROR })) :
+            Promise.resolve(dispatch({type: ImportExportAction.ERROR})) :
             projectService.importTranslations(id, language, file)
                 .then(res => {
-                dispatch(updateKeysets(res));
-                return dispatch(closeDialog());
-            })
+                    dispatch(updateKeysets(res));
+                    return dispatch(closeDialog());
+                })
                 .then(loadingDone(dispatch));
     };
 }

@@ -15,20 +15,22 @@
  *  * limitations under the License.
  *
  */
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 import * as React from 'react';
-import { Container, TabContent, TabPane, Row, Col } from 'reactstrap';
-import { ProjectFileExplorer } from './ProjectFileExplorer';
-import { KeysetAssistant } from './KeysetAssistant';
-import { KeyTable } from './KeyTable';
-import { SearchBar } from './SearchBar';
-import { ExportTranslations } from './ExportTranslations';
-import { ImportTranslations } from './ImportTranslations';
+import {Container, TabContent, TabPane, Row, Col} from 'reactstrap';
+import {ProjectFileExplorer} from './ProjectFileExplorer';
+import {KeysetAssistant} from './KeysetAssistant';
+import {KeyTable} from './KeyTable';
+import {SearchBar} from './SearchBar';
+import {ExportTranslations} from './ExportTranslations';
+import {ImportTranslations} from './ImportTranslations';
+
 const mapState = (state) => ({
     selection: state.main.selected,
     all: state.main.all,
     tab: state.main.tab
 });
+
 class _Selection extends React.Component {
     constructor(props) {
         super(props);
@@ -36,52 +38,56 @@ class _Selection extends React.Component {
             tab: props.tab
         };
     }
+
     componentWillReceiveProps(nextProps) {
         if (this.props.all !== nextProps.all) {
             this.setTab(0);
         }
     }
+
     setTab(index) {
         this.setState({
             tab: index
         });
     }
+
     render() {
         if (this.props.selection === null && !this.props.all) {
             return <Container className="text-center text-muted py-3" fluid><h4>Aucune sélection</h4></Container>;
         }
         else {
             return (<div>
-                    <TabContent activeTab={this.props.tab}>
-                        <TabPane tabId={0}>
-                            <Container fluid>
-                                <SearchBar />
-                                <KeyTable />
-                            </Container>
-                        </TabPane>
-                        <TabPane tabId={1}>
-                            <Row>
-                                <Col md={8}>
-                                    <ProjectFileExplorer />
-                                </Col>
-                                <Col className="pl-4" md={4}>
-                                    <KeysetAssistant />
-                                </Col>
-                            </Row>
-                        </TabPane>
-                        <TabPane tabId={2}>
-                            <Row>
-                                <Col md={4}>
-                                    <ExportTranslations />
-                                </Col>
-                                <Col md={8} className="pl-4">
-                                    <ImportTranslations />
-                                </Col>
-                            </Row>
-                        </TabPane>
-                    </TabContent>
-                </div>);
+                <TabContent activeTab={this.props.tab}>
+                    <TabPane tabId={0}>
+                        <Container fluid>
+                            <SearchBar/>
+                            <KeyTable/>
+                        </Container>
+                    </TabPane>
+                    <TabPane tabId={1}>
+                        <Row>
+                            <Col md={8}>
+                                <ProjectFileExplorer/>
+                            </Col>
+                            <Col className="pl-4" md={4}>
+                                <KeysetAssistant/>
+                            </Col>
+                        </Row>
+                    </TabPane>
+                    <TabPane tabId={2}>
+                        <Row>
+                            <Col md={4}>
+                                <ExportTranslations/>
+                            </Col>
+                            <Col md={8} className="pl-4">
+                                <ImportTranslations/>
+                            </Col>
+                        </Row>
+                    </TabPane>
+                </TabContent>
+            </div>);
         }
     }
 }
+
 export const Selection = connect(mapState)(_Selection);

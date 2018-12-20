@@ -16,6 +16,6 @@
  *
  */
 export const blobFrom = exported => {
-    let blob = new Blob([exported.exported], { type: 'text/csv' });
+    let blob = new Blob([exported.exported], {type: 'text/csv'});
     return URL.createObjectURL(blob);
 };

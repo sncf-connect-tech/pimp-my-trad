@@ -16,8 +16,9 @@
  *
  */
 import * as React from 'react';
-import { Component } from 'react';
-import { Input, Label } from 'reactstrap';
+import {Component} from 'react';
+import {Input, Label} from 'reactstrap';
+
 export class FileInput extends Component {
     constructor(props) {
         super(props);
@@ -25,19 +26,22 @@ export class FileInput extends Component {
             file: null
         };
     }
+
     render() {
         return (<div className="custom-file">
-                <Input className="custom-file-input" type="file" onChange={e => this.handleChange(e)}/>
-                <Label className="custom-file-label">
-                    {this.fileName()}
-                </Label>
-            </div>);
+            <Input className="custom-file-input" type="file" onChange={e => this.handleChange(e)}/>
+            <Label className="custom-file-label">
+                {this.fileName()}
+            </Label>
+        </div>);
     }
+
     handleChange(e) {
         let file = e.currentTarget.files[0];
-        this.setState({ file });
+        this.setState({file});
         this.props.onFileChanged(file);
     }
+
     fileName() {
         if (this.state.file === null) {
             return '(aucun fichier)';

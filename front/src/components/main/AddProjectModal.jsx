@@ -16,11 +16,12 @@
  *
  */
 import * as React from 'react';
-import { Modal, ModalHeader, ModalFooter, ModalBody, Button, FormGroup, Input } from 'reactstrap';
-import { connect } from 'react-redux';
-import { closeDialog } from '../../app/actions/DialogAction';
-import { importProject } from '../../app/actions/ProjectAction';
-import { LoadingButton } from '../LoadingButton';
+import {Modal, ModalHeader, ModalFooter, ModalBody, Button, FormGroup, Input} from 'reactstrap';
+import {connect} from 'react-redux';
+import {closeDialog} from '../../app/actions/DialogAction';
+import {importProject} from '../../app/actions/ProjectAction';
+import {LoadingButton} from '../LoadingButton';
+
 const mapState = state => ({
     show: state.dialogs.addProject
 });
@@ -28,6 +29,7 @@ const mapDispatch = dispatch => ({
     hide: () => dispatch(closeDialog()),
     importProject: path => dispatch(importProject(path))
 });
+
 class _AddProjectModal extends React.Component {
     constructor(props) {
         super(props);
@@ -35,24 +37,28 @@ class _AddProjectModal extends React.Component {
             repo: ''
         };
     }
+
     onChange(event) {
         this.setState({
             repo: event.currentTarget.value
         });
     }
+
     render() {
         return (<Modal fade={true} isOpen={this.props.show} toggle={() => this.props.hide()}>
-                <ModalHeader>Importer un projet</ModalHeader>
-                <ModalBody>
-                    <FormGroup>
-                        <Input type="text" placeholder="Dépôt git" onChange={(e) => this.onChange(e)}/>
-                    </FormGroup>
-                </ModalBody>
-                <ModalFooter>
-                    <LoadingButton color="primary" onClick={() => this.props.importProject(this.state.repo)}>Importer</LoadingButton>{' '}
-                    <Button color="secondary" onClick={this.props.hide}>Annuler</Button>
-                </ModalFooter>
-            </Modal>);
+            <ModalHeader>Importer un projet</ModalHeader>
+            <ModalBody>
+                <FormGroup>
+                    <Input type="text" placeholder="Dépôt git" onChange={(e) => this.onChange(e)}/>
+                </FormGroup>
+            </ModalBody>
+            <ModalFooter>
+                <LoadingButton color="primary"
+                               onClick={() => this.props.importProject(this.state.repo)}>Importer</LoadingButton>{' '}
+                <Button color="secondary" onClick={this.props.hide}>Annuler</Button>
+            </ModalFooter>
+        </Modal>);
     }
 }
+
 export const AddProjectModal = connect(mapState, mapDispatch)(_AddProjectModal);

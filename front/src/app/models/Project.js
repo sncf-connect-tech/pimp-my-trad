@@ -15,16 +15,19 @@
  *  * limitations under the License.
  *
  */
-import { Keyset } from './Keyset';
+import {Keyset} from './Keyset';
+
 export function allKeysetsWithNames(projects) {
     return projects.reduce((res, project) => ({
         ...res,
         [project.name]: project.keysets.slice()
     }), {});
 }
+
 export function allKeysets(projects) {
     return projects.reduce((res, project) => res.concat(project.keysets), []);
 }
+
 export class Project {
     static from(object) {
         return Object.assign(new Project(), {
@@ -32,12 +35,14 @@ export class Project {
             keysets: object.keysets != null ? object.keysets.map(Keyset.from) : []
         });
     }
+
     setKey(keysetId, targetId, newKey) {
         return Project.from({
             name: this.name,
             keysets: this.keysets.map(k => k.id === keysetId ? k.setKey(targetId, newKey) : k)
         });
     }
+
     setKeyset(keyset, isNew) {
         return Project.from({
             name: this.name,

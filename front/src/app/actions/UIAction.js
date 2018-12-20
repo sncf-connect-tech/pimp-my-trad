@@ -15,25 +15,29 @@
  *  * limitations under the License.
  *
  */
-import { timeout } from '../utils';
+import {timeout} from '../utils';
+
 export var UIAction;
 (function (UIAction) {
     UIAction["SET_TAB"] = "SET_TAB";
     UIAction["SET_NOTIFICATION"] = "SET_NOTIFICATION";
     UIAction["SET_LOADING"] = "SET_LOADING";
 })(UIAction || (UIAction = {}));
+
 export function setTab(tab) {
     return {
         type: UIAction.SET_TAB,
         tab
     };
 }
+
 export function setLoading(loading) {
     return {
         type: UIAction.SET_LOADING,
         loading
     };
 }
+
 export function notify(message) {
     return dispatch => Promise.resolve(dispatch({
         type: UIAction.SET_NOTIFICATION,
@@ -41,10 +45,11 @@ export function notify(message) {
     }))
         .then(_ => timeout(3000))
         .then(_ => dispatch({
-        type: UIAction.SET_NOTIFICATION,
-        notification: null
-    }));
+            type: UIAction.SET_NOTIFICATION,
+            notification: null
+        }));
 }
+
 export function loadingDone(dispatch) {
     return (res) => {
         dispatch(setLoading(false));

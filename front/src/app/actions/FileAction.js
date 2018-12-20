@@ -15,9 +15,10 @@
  *  * limitations under the License.
  *
  */
-import { projectService } from '../services/ProjectService';
-import { selectProject, selectAll } from './ProjectAction';
-import { loadingDone, setLoading } from './UIAction';
+import {projectService} from '../services/ProjectService';
+import {selectProject, selectAll} from './ProjectAction';
+import {loadingDone, setLoading} from './UIAction';
+
 export var FileAction;
 (function (FileAction) {
     FileAction["BROWSE"] = "BROWSE";
@@ -26,23 +27,25 @@ export var FileAction;
     FileAction["RESET_SELECTION"] = "RESET_SELECTION";
     FileAction["ERROR"] = "ERROR";
 })(FileAction || (FileAction = {}));
+
 export function browseProjectFiles(projectName, path) {
     return dispatch => {
         dispatch(setLoading(true));
         return projectService.getProjectFiles(projectName, path)
             .then(files => dispatch({
-            type: FileAction.BROWSE,
-            files: files,
-            workingDir: path
-        }))
+                type: FileAction.BROWSE,
+                files: files,
+                workingDir: path
+            }))
             .then(_ => dispatch(selectProject(projectName)))
             .catch(err => dispatch({
-            type: FileAction.ERROR,
-            err
-        }))
+                type: FileAction.ERROR,
+                err
+            }))
             .then(loadingDone(dispatch));
     };
 }
+
 export function browseProject(projectName) {
     return (dispatch, getState) => projectName === null ?
         Promise.resolve(dispatch({
@@ -53,15 +56,18 @@ export function browseProject(projectName) {
             .then(() => dispatch(selectAll())) :
         dispatch(browseProjectFiles(projectName, '/'));
 }
+
 export function browseFiles(path) {
     return (dispatch, getState) => dispatch(browseProjectFiles(getState().main.selected || '', path));
 }
+
 export function toggleFileSelect(path) {
     return {
         type: FileAction.TOGGLE,
         file: path
     };
 }
+
 export function selectFile(path, language) {
     return {
         type: FileAction.SELECT,
@@ -69,6 +75,7 @@ export function selectFile(path, language) {
         language: language
     };
 }
+
 export function resetSelection() {
     return {
         type: FileAction.RESET_SELECTION

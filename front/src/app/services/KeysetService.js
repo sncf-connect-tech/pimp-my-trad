@@ -15,59 +15,64 @@
  *  * limitations under the License.
  *
  */
-import { Key, Keyset } from '../models/Keyset';
-import { and, authHeaders, jsonHeaders, rejectHttpErrors } from './commons';
+import {Key, Keyset} from '../models/Keyset';
+import {and, authHeaders, jsonHeaders, rejectHttpErrors} from './commons';
+
 class KeysetService {
     createKeyset(projectName, mapping) {
         return jsonHeaders()
             .then(and(authHeaders()))
             .then(headers => fetch(`/projects/${projectName}/keysets/`, {
-            method: 'post',
-            headers: headers,
-            body: JSON.stringify(mapping.toObject())
-        }))
+                method: 'post',
+                headers: headers,
+                body: JSON.stringify(mapping.toObject())
+            }))
             .then(rejectHttpErrors)
             .then(res => res.json())
             .then(Keyset.from);
     }
+
     setKey(projectName, keysetId, keyId, language, translation) {
         return jsonHeaders()
             .then(and(authHeaders()))
             .then(headers => fetch(`/projects/${projectName}/keysets/${keysetId}/keys/${keyId}`, {
-            method: 'put',
-            headers: headers,
-            body: JSON.stringify({
-                language: language,
-                translation: translation
-            })
-        }))
+                method: 'put',
+                headers: headers,
+                body: JSON.stringify({
+                    language: language,
+                    translation: translation
+                })
+            }))
             .then(rejectHttpErrors)
             .then(res => res.json())
             .then(Key.from);
     }
+
     addFiles(projectName, keysetId, mapping, overwrite = true) {
         return jsonHeaders()
             .then(and(authHeaders()))
             .then(headers => fetch(`/projects/${projectName}/keysets/${keysetId}?overwrite=${overwrite}`, {
-            method: 'put',
-            headers: headers,
-            body: JSON.stringify(mapping.toObject())
-        }))
+                method: 'put',
+                headers: headers,
+                body: JSON.stringify(mapping.toObject())
+            }))
             .then(rejectHttpErrors)
             .then(res => res.json())
             .then(Keyset.from);
     }
+
     translateNow(projectName, keysetId, keyId, language) {
         return jsonHeaders()
             .then(and(authHeaders()))
             .then(headers => fetch(`/projects/${projectName}/keysets/${keysetId}/keys/${keyId}/translate`, {
-            method: 'post',
-            headers: headers,
-            body: JSON.stringify({ language })
-        }))
+                method: 'post',
+                headers: headers,
+                body: JSON.stringify({language})
+            }))
             .then(rejectHttpErrors)
             .then(res => res.json())
             .then(Key.from);
     }
 }
+
 export const keysetService = new KeysetService();
