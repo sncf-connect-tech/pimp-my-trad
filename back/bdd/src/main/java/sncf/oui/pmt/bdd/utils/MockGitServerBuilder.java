@@ -115,6 +115,13 @@ public class MockGitServerBuilder {
         return this;
     }
 
+    public MockGitServerBuilder checkout(String branch) throws GitAPIException {
+        try (Git git = new Git(repo)) {
+            git.checkout().setCreateBranch(true).setName(branch).call();
+        }
+        return this;
+    }
+
     private GitServlet buildServlet() {
         GitServlet servlet = new GitServlet();
         servlet.setRepositoryResolver((req, name) -> {

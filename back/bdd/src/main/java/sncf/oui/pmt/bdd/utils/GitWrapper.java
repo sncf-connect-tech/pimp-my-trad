@@ -56,7 +56,6 @@ public class GitWrapper {
                     .setURI(uri)
                     .setDirectory(localPath)
                     .setCredentialsProvider(creds)
-                    .setBranch("develop")
                     .call();
         } catch (IOException | GitAPIException e) {
             throw new RuntimeException(e);
@@ -74,6 +73,14 @@ public class GitWrapper {
             Files.write(path, content.getBytes(Charset.forName("UTF-8")));
             git.add().addFilepattern(name).call();
         } catch (IOException | GitAPIException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void checkout(String branch) {
+        try {
+            git.checkout().setName(branch).call();
+        } catch (GitAPIException e) {
             throw new RuntimeException(e);
         }
     }

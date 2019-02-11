@@ -90,6 +90,7 @@ public class GivenGlue extends ContextAwareGlue {
                     .setDirectory(localPath.toFile())
                     .setCredentialsProvider(credentials)
                     .call()) {
+                git.checkout().setName("develop").call();
                 StoredConfig config = git.getRepository().getConfig();
                 config.setString("remote", "origin", "url", uri);
                 config.save();
@@ -153,6 +154,7 @@ public class GivenGlue extends ContextAwareGlue {
         final String uri = String.format("http://localhost:%d/git/%s", gitPort, context.get("projectName"));
         GitWrapper git = new GitWrapper(uri, credentials);
         git.setIdentity("Test User", "test.user@yopmail.com");
+        git.checkout("develop");
         git.addFile("fr.json", ResourcesUtils.read("data/i18n/fr_alt.json"));
         git.commitAndPush("Modifed fr.json (wording.hello + new key)");
         manager.save(git);
@@ -166,11 +168,12 @@ public class GivenGlue extends ContextAwareGlue {
                 .build()
                 .forEach(manager::notify);
 
-        Path localPath = Paths.get(dataRoot, context.get("projectName"));
+        Path localPath = Paths.get(dataRoot, context.get("projectName"), ".git");
         try (Repository repo = new FileRepositoryBuilder()
                 .findGitDir(localPath.toFile())
                 .build()) {
             try (Git git = Git.wrap(repo)) {
+                git.checkout().setName("develop").call();
                 git.add().addFilepattern(".").call();
                 git.commit().setAll(true).setAllowEmpty(false).setAmend(false).setMessage("Modify wording.hello").call();
                 git.pull().setCredentialsProvider(credentials).setRebase(true).call();

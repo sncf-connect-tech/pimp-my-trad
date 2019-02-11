@@ -84,9 +84,11 @@ public class TestConfig {
     @Bean
     public Server gitServer(@Value("${gitPort:8888}") int gitPort) throws Throwable {
         return new MockGitServerBuilder()
+                .commit("Initial commit")
+                .checkout("develop")
                 .addFile("fr.json", ResourcesUtils.read("data/i18n/fr.json"))
                 .addFile("en.json", ResourcesUtils.read("data/i18n/en.json"))
-                .commit("Initial commit")
+                .commit("Add fr+en")
                 .build(gitPort);
     }
 
