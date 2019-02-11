@@ -35,7 +35,7 @@ class KeysetService {
     setKey(projectName, keysetId, keyId, language, translation) {
         return jsonHeaders()
             .then(and(authHeaders()))
-            .then(headers => fetch(`/projects/${projectName}/keysets/${keysetId}/keys/${keyId}`, {
+            .then(headers => fetch(`/projects/${projectName}/keysets/${keysetId}/keys/${encodeURIComponent(keyId)}`, {
                 method: 'put',
                 headers: headers,
                 body: JSON.stringify({
@@ -64,7 +64,7 @@ class KeysetService {
     translateNow(projectName, keysetId, keyId, language) {
         return jsonHeaders()
             .then(and(authHeaders()))
-            .then(headers => fetch(`/projects/${projectName}/keysets/${keysetId}/keys/${keyId}/translate`, {
+            .then(headers => fetch(`/projects/${projectName}/keysets/${keysetId}/keys/${encodeURIComponent(keyId)}/translate`, {
                 method: 'post',
                 headers: headers,
                 body: JSON.stringify({language})

@@ -32,10 +32,16 @@ export function setTab(tab) {
 }
 
 export function setLoading(loading) {
-    return {
-        type: UIAction.SET_LOADING,
-        loading
-    };
+    return dispatch => {
+        dispatch({
+            type: UIAction.SET_LOADING,
+            loading
+        });
+        if (loading) window.setTimeout(() => dispatch({
+            type: UIAction.SET_LOADING,
+            loading: false
+        }), 2000);
+    }
 }
 
 export function notify(message) {
@@ -52,7 +58,10 @@ export function notify(message) {
 
 export function loadingDone(dispatch) {
     return (res) => {
-        dispatch(setLoading(false));
+        dispatch({
+            type: UIAction.SET_LOADING,
+            loading: false
+        });
         return res;
     };
 }

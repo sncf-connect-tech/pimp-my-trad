@@ -115,7 +115,7 @@ class _AddLangModal extends React.Component {
 
     filenameSuggestion(keysetId, lang) {
         let k = safeGet(this.findKeyset(keysetId), 'name', '');
-        return k.replace('*', lang.toLowerCase());
+        return k.replace('*', (lang || '').toLowerCase());
     }
 
     updateProjectName(e) {

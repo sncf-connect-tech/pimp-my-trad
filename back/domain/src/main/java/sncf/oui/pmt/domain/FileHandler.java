@@ -55,7 +55,7 @@ public class FileHandler {
                                 })) :
                 read(path, null));
         return mono.onErrorResume(e -> {
-            LOGGER.error("An error occurred while reading: " + e.getMessage());
+            LOGGER.error("An error occurred while reading: " + e.getMessage(), e);
             return Mono.just(Collections.emptyMap());
         });
     }

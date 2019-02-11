@@ -95,7 +95,7 @@ public class GitService implements CloneService, SyncService, ConflictingFileHan
         try {
             git.commit()
                     .setAllowEmpty(false)
-                    .setAmend(aheadCount(git.getRepository(), "master") > 0)
+                    .setAmend(aheadCount(git.getRepository(), "develop") > 0)
                     .setMessage("pmt-auto-commit")
                     .call();
         } catch (EmtpyCommitException ignored) {
@@ -282,7 +282,8 @@ public class GitService implements CloneService, SyncService, ConflictingFileHan
                 });
     }
 
-    private Flux<String> readRaw(Path path) {        AsyncFile file;
+    private Flux<String> readRaw(Path path) {
+        AsyncFile file;
         try {
             file = new AsyncFile(path, StandardOpenOption.READ);
         } catch (IOException e) {
