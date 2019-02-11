@@ -56,6 +56,7 @@ public class GitWrapper {
                     .setURI(uri)
                     .setDirectory(localPath)
                     .setCredentialsProvider(creds)
+                    .setBranch("develop")
                     .call();
         } catch (IOException | GitAPIException e) {
             throw new RuntimeException(e);

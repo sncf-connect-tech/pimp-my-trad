@@ -120,7 +120,6 @@ public class JsonMapEncoder implements MapEncoder {
                     List<String> subList = curList.subList(entry.getKey(), curList.size() - 1);
                     try {
                         for (int i = 0; i < entry.getKey(); i++) generator.writeEndObject();
-                        System.out.println(writer.toString());
                         for (String key : subList) generator.writeObjectFieldStart(key);
                     } catch (IOException e) {
                         throw new RuntimeException(e);
