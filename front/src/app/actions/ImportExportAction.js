@@ -20,13 +20,12 @@ import {closeDialog, showImportDialog} from './DialogAction';
 import {updateKeysets} from './ProjectAction';
 import {loadingDone, setLoading} from './UIAction';
 
-export var ImportExportAction;
-(function (ImportExportAction) {
-    ImportExportAction["ERROR"] = "ERROR";
-    ImportExportAction["EXPORT_PROJECT"] = "EXPORT_PROJECT";
-    ImportExportAction["SET_EXPORTS"] = "SET_EXPORTS";
-    ImportExportAction["IMPORT_TRANSLATIONS"] = "IMPORT_TRANSLATIONS";
-})(ImportExportAction || (ImportExportAction = {}));
+export var ImportExportAction = {
+    ERROR: "ERROR",
+    EXPORT_PROJECT: "EXPORT_PROJECT",
+    SET_EXPORTS: "SET_EXPORTS",
+    IMPORT_TRANSLATIONS: "IMPORT_TRANSLATIONS",
+};
 
 export function exportSelectedProject() {
     return (dispatch, getState) => {

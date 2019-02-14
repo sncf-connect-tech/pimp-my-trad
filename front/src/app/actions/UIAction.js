@@ -17,12 +17,11 @@
  */
 import {timeout} from '../utils';
 
-export var UIAction;
-(function (UIAction) {
-    UIAction["SET_TAB"] = "SET_TAB";
-    UIAction["SET_NOTIFICATION"] = "SET_NOTIFICATION";
-    UIAction["SET_LOADING"] = "SET_LOADING";
-})(UIAction || (UIAction = {}));
+export var UIAction =  {
+    SET_TAB: "SET_TAB",
+    SET_NOTIFICATION: "SET_NOTIFICATION",
+    SET_LOADING: "SET_LOADING",
+};
 
 export function setTab(tab) {
     return {

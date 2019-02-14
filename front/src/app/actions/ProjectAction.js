@@ -20,19 +20,18 @@ import {keysetService} from '../services/KeysetService';
 import {closeDialog} from './DialogAction';
 import {loadingDone, setLoading} from './UIAction';
 
-export var ProjectAction;
-(function (ProjectAction) {
-    ProjectAction["ADD_PROJECT"] = "ADD_PROJECT";
-    ProjectAction["SET_PROJECTS"] = "SET_PROJECTS";
-    ProjectAction["SELECT_PROJECT"] = "SELECT_PROJECT";
-    ProjectAction["SET_KEYSET"] = "SET_KEYSET";
-    ProjectAction["UPDATE_KEYSETS"] = "UPDATE_KEYSETS";
-    ProjectAction["SET_KEY"] = "SET_KEY";
-    ProjectAction["SEARCH_KEY"] = "SEARCH_KEY";
-    ProjectAction["SELECT_ALL"] = "SELECT_ALL";
-    ProjectAction["FILTER_STATE"] = "FILTER_STATE";
-    ProjectAction["ERROR"] = "ERROR";
-})(ProjectAction || (ProjectAction = {}));
+export var ProjectAction = {
+    ADD_PROJECT: "ADD_PROJECT",
+    SET_PROJECTS: "SET_PROJECTS",
+    SELECT_PROJECT: "SELECT_PROJECT",
+    SET_KEYSET: "SET_KEYSET",
+    UPDATE_KEYSETS: "UPDATE_KEYSETS",
+    SET_KEY: "SET_KEY",
+    SEARCH_KEY: "SEARCH_KEY",
+    SELECT_ALL: "SELECT_ALL",
+    FILTER_STATE: "FILTER_STATE",
+    ERROR: "ERROR",
+};
 
 export function getProjects() {
     return dispatch => {

@@ -19,14 +19,13 @@ import {projectService} from '../services/ProjectService';
 import {selectProject, selectAll} from './ProjectAction';
 import {loadingDone, setLoading} from './UIAction';
 
-export var FileAction;
-(function (FileAction) {
-    FileAction["BROWSE"] = "BROWSE";
-    FileAction["SELECT"] = "SELECT_FILE";
-    FileAction["TOGGLE"] = "TOGGLE_FILE";
-    FileAction["RESET_SELECTION"] = "RESET_SELECTION";
-    FileAction["ERROR"] = "ERROR";
-})(FileAction || (FileAction = {}));
+export var FileAction = {
+    BROWSE: "BROWSE",
+    SELECT: "SELECT_FILE",
+    TOGGLE: "TOGGLE_FILE",
+    RESET_SELECTION: "RESET_SELECTION",
+    ERROR: "ERROR",
+};
 
 export function browseProjectFiles(projectName, path) {
     return dispatch => {

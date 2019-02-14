@@ -24,6 +24,7 @@ import {KeyTable} from './KeyTable';
 import {SearchBar} from './SearchBar';
 import {ExportTranslations} from './ExportTranslations';
 import {ImportTranslations} from './ImportTranslations';
+import {Overview} from "./Overview";
 
 const mapState = (state) => ({
     selection: state.main.selected,
@@ -60,6 +61,7 @@ class _Selection extends React.Component {
                 <TabContent activeTab={this.props.tab}>
                     <TabPane tabId={0}>
                         <Container fluid>
+                            <Overview/>
                             <SearchBar/>
                             <KeyTable/>
                         </Container>

@@ -15,15 +15,14 @@
  *  * limitations under the License.
  *
  */
-export var DialogAction;
-(function (DialogAction) {
-    DialogAction["SHOW_ADD_PROJECT"] = "SHOW_ADD_PROJECT";
-    DialogAction["SHOW_ADD_KEY"] = "SHOW_ADD_KEY";
-    DialogAction["CLOSE_ANY"] = "CLOSE_ANY";
-    DialogAction["SHOW_ADD_LANG"] = "SHOW_ADD_LANG";
-    DialogAction["SHOW_SYNC_DIALOG"] = "SHOW_SYNC_DIALOG";
-    DialogAction["SHOW_IMPORT_DIALOG"] = "SHOW_IMPORT_DIALOG";
-})(DialogAction || (DialogAction = {}));
+export var DialogAction = {
+    SHOW_ADD_PROJECT: "SHOW_ADD_PROJECT",
+    SHOW_ADD_KEY: "SHOW_ADD_KEY",
+    CLOSE_ANY: "CLOSE_ANY",
+    SHOW_ADD_LANG: "SHOW_ADD_LANG",
+    SHOW_SYNC_DIALOG: "SHOW_SYNC_DIALOG",
+    SHOW_IMPORT_DIALOG: "SHOW_IMPORT_DIALOG",
+};
 
 export function showAddProject() {
     return {

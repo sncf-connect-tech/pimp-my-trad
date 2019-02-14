@@ -1,9 +1,8 @@
 import {authHeaders, rejectHttpErrors} from '../services/commons';
 
-export var AuthAction;
-(function (AuthAction) {
-    AuthAction["SET_AUTH_STATUS"] = "SET_AUTH_STATUS";
-})(AuthAction || (AuthAction = {}));
+export var AuthAction = {
+    SET_AUTH_STATUS: "SET_AUTH_STATUS"
+};
 
 export function checkAuth(user, pass) {
     return dispatch => {
