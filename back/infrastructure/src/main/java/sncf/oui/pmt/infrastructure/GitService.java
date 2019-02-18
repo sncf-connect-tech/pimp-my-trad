@@ -46,6 +46,7 @@ import java.io.IOException;
 import java.nio.file.*;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.BaseStream;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -190,6 +191,7 @@ public class GitService implements CloneService, SyncService, ConflictingFileHan
                             .setURI(projectMetadata.getOrigin())
                             .setCredentialsProvider(credentials)
                             .setDirectory(rootPath.toFile())
+                            .setBranch("develop")
                             .call()) {
                         git.getRepository().close();
                         sink.success();
@@ -268,48 +270,35 @@ public class GitService implements CloneService, SyncService, ConflictingFileHan
     public Mono<Void> write(String f, String content) {
         return getAbsolutePath(Paths.get(f))
                 .flatMap(path -> hasConflict(path).map(conflict -> conflict ? tmpPathFor(path.toString()) : path))
-                .flatMap(realPath -> {
+                .flatMap(realPath -> Mono.create(sink -> {
                     try {
-                        AsyncFile file = new AsyncFile(realPath,
+                        Files.write(realPath, content.getBytes(),
                                 StandardOpenOption.WRITE,
-                                StandardOpenOption.READ,
                                 StandardOpenOption.CREATE,
                                 StandardOpenOption.TRUNCATE_EXISTING);
-                        return file.writeString(content).doOnComplete(file::close).then();
+                        sink.success();
                     } catch (IOException e) {
-                        return Mono.error(e);
+                        sink.error(e);
                     }
-                });
+                }));
     }
 
     private Flux<String> readRaw(Path path) {
-        AsyncFile file;
-        try {
-            file = new AsyncFile(path, StandardOpenOption.READ);
-        } catch (IOException e) {
-            return Flux.error(e);
-        }
-        return file.readLines()
-                .doOnComplete(file::close);
+        return Flux.using(() -> Files.lines(path),
+                Flux::fromStream,
+                BaseStream::close
+        );
     }
 
     private Flux<String> readConflictLines(Path path, ConflictMark... validMarks) {
 
-        AsyncFile file;
-        try {
-            file = new AsyncFile(path, StandardOpenOption.READ);
-        } catch (IOException e) {
-            return Flux.error(e);
-        }
-
-        Flux<String> lines = file.readLines().cache();
+        Flux<String> lines = readRaw(path).cache();
         Flux<ConflictMark> actualMarks = lines.map(ConflictMark::from);
 
         return Flux.zip(lines, actualMarks.scan(ConflictMark::scan), actualMarks)
                 .filter(tuple -> !tuple.getT3().isPresent())
                 .filter(tuple -> Stream.of(validMarks).anyMatch(m -> tuple.getT2().equals(m)))
-                .map(Tuple3::getT1)
-                .doOnComplete(file::close);
+                .map(Tuple3::getT1);
     }
 }
 
