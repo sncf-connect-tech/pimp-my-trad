@@ -75,7 +75,7 @@ class _ImportTranslationsModal extends Component {
     renderEntry(fileState, n) {
         return (<Fragment key={fileState.key}>
             {n > 0 ?
-                <Button className="float-right py-0 px-1" size="sm" onClick={() => this.removeFile(n)}
+                <Button className="float-right py-0 px-1 import-modal-close" size="sm" onClick={() => this.removeFile(n)}
                         color="danger">&times;</Button> :
                 ''}
             <FormGroup className="mt-1">

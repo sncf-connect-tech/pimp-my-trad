@@ -47,12 +47,40 @@ export class Key {
     }
 
     translation(key) {
-        return (this.translations[key] || [])[0];
+        return (this.translations[key] || [''])[0];
     }
 
     conflicting(key) {
-        return (this.translations[key] || [])[1] || null;
+        return this.translations[key][1] || null;
     }
+}
+
+export var KeyState = {
+    'todo': 'TODO',
+    'inprogress': 'IN PROGRESS',
+    'done': 'DONE',
+    'conflict': 'CONFLICT'
+};
+
+export function getColorForState(key) {
+    switch (key) {
+        case 'done':
+            return 'success';
+        case 'inprogress':
+            return 'info';
+        case 'todo':
+            return 'warning';
+        case 'conflict':
+            return 'danger';
+        default:
+            return 'secondary';
+    }
+}
+
+export function trimTags(text) {
+    return Object.keys(KeyState).reduce((text, key) => text
+        .replace(`[${key}]`, '')
+        .replace(`[${key.toUpperCase()}]`, ''), text).trim();
 }
 
 function keydictFrom(object) {

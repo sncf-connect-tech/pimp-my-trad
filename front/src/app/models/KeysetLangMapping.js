@@ -77,14 +77,13 @@ export class KeysetLangMapping {
     }
 }
 
-export var Language;
-(function (Language) {
-    Language["French"] = "FR";
-    Language["English"] = "EN";
-    Language["Spanish"] = "ES";
-    Language["German"] = "DE";
-    Language["Italian"] = "IT";
-})(Language || (Language = {}));
+export var Language = {
+    French: "FR",
+    English: "EN",
+    Spanish: "ES",
+    German: "DE",
+    Italian: "IT"
+};
 
 export function getPrettyLanguage(lang) {
     switch (lang) {

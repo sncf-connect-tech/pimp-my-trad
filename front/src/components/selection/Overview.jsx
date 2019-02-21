@@ -16,13 +16,20 @@
  *
  */
 import * as React from 'react';
-import {Col, Container, Row} from "reactstrap";
+import {Button, Col, Container, Row} from "reactstrap";
 import {allKeysets} from "../../app/models/Project";
 import {connect} from "react-redux";
+import {filterState} from "../../app/actions/ProjectAction";
+import {getColorForState, KeyState} from "../../app/models/Keyset";
 
 const mapStateToProps = state => ({
     keysets: allKeysets(state.main.all ?
         state.main.projects : state.main.projects.filter(p => p.name === state.main.selected)),
+    state: state.main.state
+});
+
+const mapDispatchToProps = (dispatch) => ({
+    filterState: state => dispatch(filterState(state)),
 });
 
 class _Overview extends React.Component {
@@ -35,22 +42,32 @@ class _Overview extends React.Component {
             .reduce((s, n) => s + n, 0);
     }
 
+    getMapping() {
+        return Object.keys(KeyState).map(key => ({
+            key,
+            color: getColorForState(key),
+            pretty: KeyState[key],
+            count: this.countState(key)
+        }));
+    }
+
     render() {
+        const {state, filterState} = this.props;
+        const mapping = this.getMapping();
+        const col = 12 / mapping.filter(m => m.count > 0).length;
         return (
             <Container>
-                <Row>
-                    <Col xs={4} className="text-center">
-                        <h1 className="display-3 text-warning font-weight-bold">{this.countState('todo')}</h1>
-                        <p className="text-muted">à faire</p>
-                    </Col>
-                    <Col xs={4} className="text-center">
-                        <h1 className="display-3 text-info font-weight-bold">{this.countState('inprogress')}</h1>
-                        <p className="text-muted">en cours</p>
-                    </Col>
-                    <Col xs={4} className="text-center">
-                        <h1 className="display-3 text-success font-weight-bold">{this.countState('done')}</h1>
-                        <p className="text-muted">terminés</p>
-                    </Col>
+                <Row className="pb-3">
+                    {mapping.map(({key: targetState, color, pretty, count}) => count > 0 && (
+                        <Col key={targetState} xs={col} className="text-center">
+                            <h1 className={`display-3 text-${color} font-weight-bold`}>{count}</h1>
+                            <Button color={color} size="sm"
+                                    onClick={() => state !== targetState ?
+                                            filterState(targetState) :
+                                            filterState(null)}
+                                    outline={state !== targetState}>{pretty}</Button>
+                        </Col>
+                    ))}
                 </Row>
             </Container>
 
@@ -58,4 +75,4 @@ class _Overview extends React.Component {
     }
 }
 
-export const Overview = connect(mapStateToProps)(_Overview);
+export const Overview = connect(mapStateToProps, mapDispatchToProps)(_Overview);

@@ -25,11 +25,12 @@ import {
     Row,
     Col,
     Input,
-    Button
+    Button, Badge
 } from 'reactstrap';
 import {getPrettyLanguage, Language} from '../../app/models/KeysetLangMapping';
 import {connect} from 'react-redux';
 import {filterState, setKey, translateNow} from '../../app/actions/ProjectAction';
+import {getColorForState, KeyState, trimTags} from "../../app/models/Keyset";
 
 const mapDispatchToProps = (dispatch) => ({
     modifyKey: (id, keysetId, projectName, lang, translation) => dispatch(setKey(id, keysetId, projectName, lang, translation)),
@@ -90,6 +91,13 @@ class _KeyTableEntry extends React.Component {
         });
     }
 
+    setTranslationState(state) {
+        const current = trimTags(this.state.text);
+        this.setState({
+            text: state === 'done' ? current : `${current} [${state.toUpperCase()}]`
+        }, () => this.modifyKey());
+    }
+
     renderFocused() {
         return (<div>
             {this.state.conflict === null ? '' :
@@ -108,26 +116,17 @@ class _KeyTableEntry extends React.Component {
                                                                         onClick={() => this.switchLang(lang)}>{getPrettyLanguage(lang)}</DropdownItem>)}
                     </DropdownMenu>
                 </UncontrolledDropdown>
+                <UncontrolledDropdown className="mx-2 d-inline-block">
+                    <DropdownToggle caret>Passer en...</DropdownToggle>
+                    <DropdownMenu>
+                        {Object.keys(KeyState).map(key => <DropdownItem key={key} onClick={() => this.setTranslationState(key)}>{KeyState[key]}</DropdownItem>)}
+                    </DropdownMenu>
+                </UncontrolledDropdown>
                 {this.state.language !== Language.French ?
                     <Button className="mx-1" onClick={() => this.translateNow()}>Traduire</Button> : null}
                 <Button color="primary" className="float-right" onClick={() => this.blur()}>Terminer</Button>
             </div>
         </div>);
-    }
-
-    getColor() {
-        switch (this.props.translationKey.state.toLowerCase()) {
-            case 'done':
-                return 'success';
-            case 'inprogress':
-                return 'info';
-            case 'todo':
-                return 'warning';
-            case 'conflict':
-                return 'danger';
-            default:
-                return 'secondary';
-        }
     }
 
     filterState(event) {
@@ -142,18 +141,17 @@ class _KeyTableEntry extends React.Component {
     }
 
     render() {
-        return (<ListGroupItem tag="li" action={!this.state.focused}
-                               onClick={() => this.state.focused ? null : this.focus()}>
+        const state = this.props.translationKey.state;
+        return (<ListGroupItem tag="li" action={!this.state.focused} onClick={() => this.state.focused ? null : this.focus()}>
             <Row>
                 <Col xs={3}><span className="text-muted">{this.props.id}</span></Col>
                 {this.state.focused ?
                     <Col xs={7}>{this.renderFocused()}</Col> :
                     <Col xs={7}><span className="">{this.defaultText()} </span></Col>}
                 <Col xs={2} className="text-right">
-                    <Button className="text-uppercase" size="sm" color={this.getColor()}
-                            onClick={e => this.filterState(e)}>
-                        {this.props.translationKey.state}
-                    </Button>
+                    <Badge color={getColorForState(state.toLowerCase())}>
+                        {state.toUpperCase()}
+                    </Badge>
                 </Col>
             </Row>
         </ListGroupItem>);

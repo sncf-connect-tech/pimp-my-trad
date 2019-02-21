@@ -45,11 +45,17 @@ class _KeyTable extends React.Component {
     }
 
     match(id, key) {
-        return (this.props.query.length === 0
-            || id.toLowerCase().indexOf(this.props.query) > -1
-            || key.translation(Language.French).toLowerCase().indexOf(this.props.query) > -1)
-            && (this.props.state == null
+        if (this.props.query.length === 0 && this.props.state == null) {
+            return true;
+        } else {
+            const matchLang = Object.keys(Language).reduce((result, langKey) => {
+                return result || (key.translation(Language[langKey])
+                    .toLowerCase()
+                    .indexOf(this.props.query) > -1)
+            }, id.toLowerCase().indexOf(this.props.query) > -1);
+            return matchLang && (this.props.state == null
                 || key.state.toLowerCase() === (this.props.state || '').toLowerCase());
+        }
     }
 
     render() {

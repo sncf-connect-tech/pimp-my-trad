@@ -21,12 +21,10 @@ import {Input, InputGroup, InputGroupAddon, Button} from 'reactstrap';
 import {filterState, searchKey} from '../../app/actions/ProjectAction';
 
 const mapState = state => ({
-    query: state.main.search,
-    stateFiltered: state.main.state != null
+    query: state.main.search
 });
 const mapDispatch = dispatch => ({
-    search: query => dispatch(searchKey(query)),
-    resetFilter: () => dispatch(filterState(null))
+    search: query => dispatch(searchKey(query))
 });
 
 class _SearchBar extends React.Component {
@@ -37,9 +35,9 @@ class _SearchBar extends React.Component {
     render() {
         return (<InputGroup>
             <Input type="text" onChange={e => this.search(e)} value={this.props.query} placeholder="Rechercher..."/>
-            {this.props.stateFiltered ?
+            {this.props.query.length > 0 ?
                 (<InputGroupAddon addonType="append">
-                    <Button onClick={() => this.props.resetFilter()}>Tous les états</Button>
+                    <Button color="danger" size="sm" onClick={() => this.props.search('')}>&times;</Button>
                 </InputGroupAddon>) : ''}
         </InputGroup>);
     }
