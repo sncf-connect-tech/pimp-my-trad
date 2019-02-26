@@ -32,6 +32,17 @@ export class Keyset {
         });
     }
 
+    deleteKey(id) {
+        let newKeys = {...this.keys};
+        delete newKeys[id];
+        return Keyset.from({
+            name: this.name,
+            supportedLanguages: this.supportedLanguages,
+            keys: newKeys,
+            id: this.id
+        });
+    }
+
     pairs() {
         return Object.keys(this.keys).map(id => [id, this.keys[id]]);
     }

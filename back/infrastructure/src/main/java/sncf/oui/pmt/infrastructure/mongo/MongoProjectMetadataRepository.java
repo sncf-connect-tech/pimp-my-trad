@@ -61,7 +61,8 @@ public class MongoProjectMetadataRepository extends MongoRepository<ProjectMetad
 
     @Override
     public Flux<ProjectMetadata> findAll() {
-        return find();
+        return details.getUser().flux()
+                .flatMap(user -> find(Filters.eq("projectOwner", user)));
     }
 
     @Override

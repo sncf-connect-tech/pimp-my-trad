@@ -20,7 +20,11 @@ package sncf.oui.pmt.domain.keyset;
 
 import sncf.oui.pmt.DomainDrivenDesign;
 
-import java.util.*;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @DomainDrivenDesign.ValueObject
@@ -39,11 +43,21 @@ public class Keyset {
     public static Keyset fromMaps(Language lang, Map<String, String> ours, Map<String, String> theirPatch) {
         Keyset set = new Keyset();
         set.supportedLanguages.add(lang);
-        ours.forEach((key, value) -> set.withKey(key).setOurs(lang, value));
+        ours.forEach((key, value) -> {
+            if (value == null) {
+                set.withoutKey(key);
+            } else {
+                set.withKey(key).setOurs(lang, value);
+            }
+        });
         if (theirPatch != null) {
             theirPatch.forEach((key, value) -> set.withKey(key).setTheirs(lang, value));
         }
         return set;
+    }
+
+    private void withoutKey(String keyId) {
+        keys.remove(keyId);
     }
 
     public Map<String, Key> getKeys() {

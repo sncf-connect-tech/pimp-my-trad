@@ -43,6 +43,13 @@ export class Project {
         });
     }
 
+    deleteKey(keysetId, targetId) {
+        return Project.from({
+            name: this.name,
+            keysets: this.keysets.map(k => k.id === keysetId ? k.deleteKey(targetId) : k)
+        });
+    }
+
     setKeyset(keyset, isNew) {
         return Project.from({
             name: this.name,

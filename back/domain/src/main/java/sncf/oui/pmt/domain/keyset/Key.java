@@ -20,7 +20,12 @@ package sncf.oui.pmt.domain.keyset;
 
 import sncf.oui.pmt.DomainDrivenDesign;
 
-import java.util.*;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -49,6 +54,8 @@ public class Key {
     }
 
     private void beforeSet(Language lang, String translation) {
+        if (translation == null)
+            return;
         if (!translations.containsKey(lang)) {
             translations.put(lang, new LinkedList<>());
         }
@@ -63,7 +70,11 @@ public class Key {
             l.add("");
             diff = l.size() - index - 1;
         }
-        l.set(index, translated);
+        if (translated == null) {
+            l.set(index, "");
+        } else {
+            l.set(index, translated);
+        }
     }
 
     public Key setOurs(Language lang, String translation) {

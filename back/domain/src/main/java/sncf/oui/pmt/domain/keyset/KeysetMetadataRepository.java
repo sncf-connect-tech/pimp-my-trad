@@ -60,7 +60,7 @@ public class KeysetMetadataRepository {
                 .flatMap(ProjectMetadata::cloneOrContinue)
                 .flatMap(projectMetadata -> {
                     try {
-                        KeysetMetadata meta =projectMetadata.getKeyset(id);
+                        KeysetMetadata meta = projectMetadata.getKeyset(id);
                         return operation.apply(meta)
                                 .then(projectMetadataRepository.update(projectMetadata))
                                 .then(Mono.just(meta));

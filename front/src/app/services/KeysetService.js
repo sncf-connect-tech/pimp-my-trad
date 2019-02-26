@@ -48,6 +48,16 @@ class KeysetService {
             .then(Key.from);
     }
 
+    deleteKey(projectName, keysetId, keyId) {
+        return jsonHeaders()
+            .then(and(authHeaders()))
+            .then(headers => fetch(`/projects/${projectName}/keysets/${keysetId}/keys/${encodeURIComponent(keyId)}`, {
+                method: 'delete',
+                headers: headers,
+            }))
+            .then(rejectHttpErrors);
+    }
+
     addFiles(projectName, keysetId, mapping, overwrite = true) {
         return jsonHeaders()
             .then(and(authHeaders()))

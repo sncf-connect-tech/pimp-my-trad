@@ -29,13 +29,14 @@ import {
 } from 'reactstrap';
 import {getPrettyLanguage, Language} from '../../app/models/KeysetLangMapping';
 import {connect} from 'react-redux';
-import {filterState, setKey, translateNow} from '../../app/actions/ProjectAction';
+import {deleteKey, filterState, setKey, translateNow} from '../../app/actions/ProjectAction';
 import {getColorForState, KeyState, trimTags} from "../../app/models/Keyset";
 
 const mapDispatchToProps = (dispatch) => ({
     modifyKey: (id, keysetId, projectName, lang, translation) => dispatch(setKey(id, keysetId, projectName, lang, translation)),
     filterState: state => dispatch(filterState(state)),
-    translateNow: (projectName, keysetId, id, lang) => dispatch(translateNow(projectName, keysetId, id, lang))
+    translateNow: (projectName, keysetId, id, lang) => dispatch(translateNow(projectName, keysetId, id, lang)),
+    deleteKey: (projectName, keysetId, id) => dispatch(deleteKey(id, keysetId, projectName))
 });
 
 class _KeyTableEntry extends React.Component {
@@ -98,6 +99,11 @@ class _KeyTableEntry extends React.Component {
         }, () => this.modifyKey());
     }
 
+    deleteKey(e) {
+        e.stopPropagation();
+        this.props.deleteKey(this.props.projectName, this.props.keysetId, this.props.id);
+    }
+
     renderFocused() {
         return (<div>
             {this.state.conflict === null ? '' :
@@ -144,7 +150,11 @@ class _KeyTableEntry extends React.Component {
         const state = this.props.translationKey.state;
         return (<ListGroupItem tag="li" action={!this.state.focused} onClick={() => this.state.focused ? null : this.focus()}>
             <Row>
-                <Col xs={3}><span className="text-muted">{this.props.id}</span></Col>
+                <Col xs={3}>
+                    <a className="text-danger font-weight-bold" href="#" onClick={e => this.deleteKey(e)}>&times;</a>
+                    &nbsp;
+                    <span className="text-muted">{this.props.id}</span>
+                </Col>
                 {this.state.focused ?
                     <Col xs={7}>{this.renderFocused()}</Col> :
                     <Col xs={7}><span className="">{this.defaultText()} </span></Col>}

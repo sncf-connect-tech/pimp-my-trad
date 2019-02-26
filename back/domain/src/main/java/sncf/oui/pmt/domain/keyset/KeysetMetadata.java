@@ -25,7 +25,12 @@ import sncf.oui.pmt.domain.FileHandler;
 import sncf.oui.pmt.domain.TranslateService;
 
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Set;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
@@ -112,6 +117,12 @@ public class KeysetMetadata {
 
     public Mono<Keyset> updateKey(String keyId, Language lang, String translated) {
         return updateKeys(Collections.singletonMap(keyId, translated), lang);
+    }
+
+    public Mono<Keyset> deleteKey(String keyId) {
+        return Flux.fromIterable(getSupportedLanguage())
+                .flatMap(language -> updateKey(keyId, language, null))
+                .last();
     }
 
     public Mono<Boolean> hasKey(String keyId) {

@@ -80,6 +80,11 @@ export const mainReducer = (state, action) => {
                 ...state,
                 state: action.state
             };
+        case ProjectAction.DELETE_KEY:
+            return {
+                ...state,
+                projects: state.projects.map(p => p.name === action.project ? p.deleteKey(action.keysetId, action.id) : p)
+            };
         case UIAction.SET_TAB:
             return {
                 ...state,

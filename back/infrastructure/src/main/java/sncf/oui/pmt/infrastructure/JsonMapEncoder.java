@@ -105,6 +105,9 @@ public class JsonMapEncoder implements MapEncoder {
             generator.writeStartObject();
 
             for (String cur : sortedKeys) {
+
+                if (map.get(cur) == null) continue;
+
                 List<String> curList = Lists.newArrayList(cur.split("/"));
 
                 final List<String> finalPrevList = prevList;

@@ -30,7 +30,8 @@ export var ProjectAction = {
     SEARCH_KEY: "SEARCH_KEY",
     SELECT_ALL: "SELECT_ALL",
     FILTER_STATE: "FILTER_STATE",
-    ERROR: "ERROR",
+    DELETE_KEY: "DELETE_KEY",
+    ERROR: "ERROR"
 };
 
 export function getProjects() {
@@ -98,6 +99,22 @@ export function importProject(repo) {
                 return dispatch({type: ProjectAction.ERROR, message: error.error});
             });
     };
+}
+
+export function deleteKey(keyId, keysetId, projectName) {
+    return dispatch => {
+        dispatch(setLoading(true));
+        return keysetService.deleteKey(projectName, keysetId, keyId)
+            .then(_ => {
+                dispatch({
+                    type: ProjectAction.DELETE_KEY,
+                    project: projectName,
+                    keysetId: keysetId,
+                    id: keyId
+                });
+            })
+            .then(loadingDone(dispatch));
+    }
 }
 
 export function setKey(keyId, keysetId, projectName, language, translation) {

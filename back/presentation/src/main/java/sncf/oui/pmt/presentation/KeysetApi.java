@@ -21,13 +21,25 @@ package sncf.oui.pmt.presentation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import sncf.oui.pmt.application.KeysetCreation;
+import sncf.oui.pmt.domain.keyset.Key;
+import sncf.oui.pmt.domain.keyset.KeyNotFoundException;
+import sncf.oui.pmt.domain.keyset.Keyset;
 import sncf.oui.pmt.domain.keyset.KeysetInput;
-import sncf.oui.pmt.domain.project.ProjectMetadataRepository;
-import sncf.oui.pmt.domain.keyset.*;
+import sncf.oui.pmt.domain.keyset.KeysetMetadata;
+import sncf.oui.pmt.domain.keyset.KeysetMetadataRepository;
 
 import javax.validation.Valid;
 import java.util.Optional;
@@ -110,6 +122,15 @@ public class KeysetApi {
                     }
                 })
                 .map(key -> ResponseEntity.ok().body(key));
+    }
+
+    @DeleteMapping("/keysets/{id}/keys/{keyId}")
+    public Mono<ResponseEntity<Void>> deleteKeyInSet(@PathVariable("name") String name,
+                                                    @PathVariable("id") String id,
+                                                    @PathVariable("keyId") String keyId) {
+        return repository.find(name, id).single()
+                .flatMap(meta -> meta.deleteKey(keyId))
+                .then(Mono.just(ResponseEntity.ok().build()));
     }
 
     @PutMapping("/keysets/{id}")

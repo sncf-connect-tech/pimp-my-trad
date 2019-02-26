@@ -87,7 +87,7 @@ public class GitService implements CloneService, SyncService, ConflictingFileHan
 
     private Git makeGit(File file) throws IOException {
         Repository repo = new FileRepositoryBuilder()
-                .findGitDir(file)
+                .setGitDir(Paths.get(file.toString(), ".git").toFile())
                 .build();
         return Git.wrap(repo);
     }
