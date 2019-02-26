@@ -54,13 +54,13 @@ public class Key {
     }
 
     private void beforeSet(Language lang, String translation) {
-        if (translation == null)
-            return;
         if (!translations.containsKey(lang)) {
             translations.put(lang, new LinkedList<>());
         }
-        KeyState computed = parseStateTag(translation);
-        this.state = computed.compareTo(state) > 0 ? state : computed;
+        if (translation != null) {
+            KeyState computed = parseStateTag(translation);
+            this.state = computed.compareTo(state) > 0 ? state : computed;
+        }
     }
 
     private void safeSet(Language lang, int index, String translated) {
