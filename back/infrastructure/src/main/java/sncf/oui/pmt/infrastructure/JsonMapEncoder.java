@@ -18,26 +18,27 @@
 
 package sncf.oui.pmt.infrastructure;
 
-import com.fasterxml.jackson.core.*;
+import com.fasterxml.jackson.core.JsonFactory;
+import com.fasterxml.jackson.core.JsonGenerator;
+import com.fasterxml.jackson.core.JsonParser;
+import com.fasterxml.jackson.core.JsonToken;
 import com.fasterxml.jackson.core.util.DefaultPrettyPrinter;
-import com.fasterxml.jackson.core.util.MinimalPrettyPrinter;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.type.MapType;
-import com.fasterxml.jackson.databind.type.TypeFactory;
-import com.google.api.client.json.Json;
 import com.google.common.collect.Lists;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
-import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 import sncf.oui.pmt.domain.keyset.MapEncoder;
 
 import java.io.IOException;
 import java.io.StringWriter;
-import java.io.Writer;
-import java.util.*;
-import java.util.function.Consumer;
+import java.util.AbstractMap;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+import java.util.Stack;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 import java.util.stream.Stream;
@@ -110,7 +111,8 @@ public class JsonMapEncoder implements MapEncoder {
                 Optional<AbstractMap.SimpleEntry<Integer, Boolean>> pair = IntStream
                         .range(0, Math.max(curList.size() - 1, prevList.size() - 1)) // if only the last key differs, there is no need to end an object
                         .mapToObj(i -> {
-                            return new AbstractMap.SimpleEntry<>(i, curList.get(i) != null && curList.get(i).equals(finalPrevList.get(i)));
+                            return new AbstractMap.SimpleEntry<>(i, curList.get(i) != null && finalPrevList.get(i) != null
+                                    && curList.get(i).equals(finalPrevList.get(i)));
                         })
                         .filter(p -> p.getValue().equals(false))
                         .findFirst();

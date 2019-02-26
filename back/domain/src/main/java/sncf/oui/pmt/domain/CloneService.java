@@ -26,4 +26,5 @@ import sncf.oui.pmt.domain.project.ProjectMetadata;
 public interface CloneService {
     void setProject(ProjectMetadata projectMetadata);
     Mono<String> cloneProject();
+    Mono<Void> removeProject();
 }

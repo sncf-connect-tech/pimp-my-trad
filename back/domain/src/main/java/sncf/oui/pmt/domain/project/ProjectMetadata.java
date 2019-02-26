@@ -77,6 +77,11 @@ public class ProjectMetadata {
                 .then(Mono.just(this));
     }
 
+    public Mono<ProjectMetadata> delete() {
+        return cloneService.removeProject()
+                .then(Mono.just(this));
+    }
+
     public Mono<Boolean> attemptSync() {
         return syncService.attemptSync()
                 .collectList()

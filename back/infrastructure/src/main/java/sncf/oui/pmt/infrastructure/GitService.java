@@ -18,7 +18,11 @@
 
 package sncf.oui.pmt.infrastructure;
 
-import org.eclipse.jgit.api.*;
+import org.eclipse.jgit.api.AddCommand;
+import org.eclipse.jgit.api.Git;
+import org.eclipse.jgit.api.PullResult;
+import org.eclipse.jgit.api.RebaseCommand;
+import org.eclipse.jgit.api.RebaseResult;
 import org.eclipse.jgit.api.errors.EmtpyCommitException;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.api.errors.JGitInternalException;
@@ -27,30 +31,36 @@ import org.eclipse.jgit.lib.BranchTrackingStatus;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.eclipse.jgit.transport.CredentialsProvider;
+import org.eclipse.jgit.util.FileUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.security.core.context.ReactiveSecurityContextHolder;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.FluxSink;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 import reactor.util.function.Tuple3;
-import sncf.oui.pmt.domain.*;
+import sncf.oui.pmt.domain.CloneException;
+import sncf.oui.pmt.domain.CloneService;
+import sncf.oui.pmt.domain.ConflictFlag;
+import sncf.oui.pmt.domain.ConflictingFileHandle;
+import sncf.oui.pmt.domain.SyncService;
 import sncf.oui.pmt.domain.project.ProjectMetadata;
 
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.nio.file.StandardOpenOption;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.BaseStream;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
-import java.nio.file.StandardOpenOption;
 
 @Component
 public class GitService implements CloneService, SyncService, ConflictingFileHandle {
@@ -210,6 +220,19 @@ public class GitService implements CloneService, SyncService, ConflictingFileHan
                 })
                         .publishOn(Schedulers.single())
                         .then(Mono.just(rootPath.toString())));
+    }
+
+    @Override
+    public Mono<Void> removeProject() {
+        return getAbsolutePath(Paths.get(projectMetadata.getProjectDir(), ".git"))
+                .flatMap(path -> {
+                    try {
+                        FileUtils.delete(path.toFile(), FileUtils.RECURSIVE);
+                        return Mono.empty();
+                    } catch (IOException e) {
+                        return Mono.error(e);
+                    }
+                });
     }
 
     private Flux<String> readWithFlag(Path path, ConflictFlag flag) {

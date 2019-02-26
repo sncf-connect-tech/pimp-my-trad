@@ -30,4 +30,5 @@ public interface ProjectMetadataRepository {
     Mono<ProjectMetadata> findById(String id);
     Mono<ProjectMetadata> save(ProjectMetadata project);
     Mono<ProjectMetadata> update(ProjectMetadata project);
+    Mono<Boolean> delete(ProjectMetadata project);
 }

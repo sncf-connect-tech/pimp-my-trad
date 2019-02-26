@@ -20,14 +20,14 @@ package sncf.oui.pmt.infrastructure.mongo;
 
 import com.mongodb.client.model.Filters;
 import com.mongodb.reactivestreams.client.MongoDatabase;
-import sncf.oui.pmt.domain.project.ProjectMetadataRepository;
-import sncf.oui.pmt.domain.project.ProjectMetadata;
-import sncf.oui.pmt.domain.project.ProjectNotFoundException;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import sncf.oui.pmt.domain.project.ProjectMetadata;
+import sncf.oui.pmt.domain.project.ProjectMetadataRepository;
+import sncf.oui.pmt.domain.project.ProjectNotFoundException;
 import sncf.oui.pmt.infrastructure.AuthenticationDetails;
 
 @Component
@@ -97,6 +97,11 @@ public class MongoProjectMetadataRepository extends MongoRepository<ProjectMetad
         return project.getId().isPresent()
                 ? replace(Filters.eq("_id", new ObjectId(project.getId().get())), project)
                 : Mono.error(new ProjectNotFoundException());
+    }
+
+    @Override
+    public Mono<Boolean> delete(ProjectMetadata project) {
+        return delete(Filters.eq("_id", new ObjectId(project.getId().get())));
     }
 }
 

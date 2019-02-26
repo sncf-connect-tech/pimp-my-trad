@@ -18,7 +18,7 @@
 import * as React from 'react';
 import {connect} from 'react-redux';
 import {Input, InputGroup, InputGroupAddon, Button} from 'reactstrap';
-import {filterState, searchKey} from '../../app/actions/ProjectAction';
+import {searchKey} from '../../app/actions/ProjectAction';
 
 const mapState = state => ({
     query: state.main.search

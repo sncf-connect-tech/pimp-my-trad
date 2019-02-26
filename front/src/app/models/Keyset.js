@@ -47,11 +47,11 @@ export class Key {
     }
 
     translation(key) {
-        return (this.translations[key] || [''])[0];
+        return (this.translations[key] || [])[0] || '';
     }
 
     conflicting(key) {
-        return this.translations[key][1] || null;
+        return (this.translations[key] || [])[1] || null;
     }
 }
 
