@@ -87,7 +87,7 @@ public class GitService implements CloneService, SyncService, ConflictingFileHan
 
     private Git makeGit(File file) throws IOException {
         Repository repo = new FileRepositoryBuilder()
-                .setGitDir(Paths.get(file.toString(), ".git").toFile())
+                .findGitDir(file)
                 .build();
         return Git.wrap(repo);
     }
@@ -169,7 +169,7 @@ public class GitService implements CloneService, SyncService, ConflictingFileHan
         return getAbsolutePath(Paths.get(projectMetadata.getProjectDir()))
                 .flux()
                 .flatMap(projectRoot -> Flux.create((FluxSink<String> sink) -> {
-                    try (Git git = makeGit(projectRoot.toFile())) {
+                    try (Git git = makeGit(Paths.get(projectRoot.toString(), ".git").toFile())) {
                         if (git.status().call().getConflicting().isEmpty()) { // no conflict
                             LOGGER.info("no conflict detected");
                             handleNoConflict(git, files, sink);

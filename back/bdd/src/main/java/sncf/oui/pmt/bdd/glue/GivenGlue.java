@@ -22,19 +22,13 @@ import cucumber.api.java.fr.Et;
 import cucumber.api.java.fr.Soit;
 import org.bson.Document;
 import org.eclipse.jgit.api.Git;
-import org.eclipse.jgit.api.RemoteRemoveCommand;
-import org.eclipse.jgit.api.RemoteSetUrlCommand;
 import org.eclipse.jgit.api.Status;
 import org.eclipse.jgit.api.errors.GitAPIException;
 import org.eclipse.jgit.api.errors.JGitInternalException;
-import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.lib.StoredConfig;
-import org.eclipse.jgit.revwalk.RevCommit;
-import org.eclipse.jgit.revwalk.RevWalk;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.eclipse.jgit.transport.CredentialsProvider;
-import org.eclipse.jgit.transport.URIish;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -47,10 +41,8 @@ import sncf.oui.pmt.bdd.utils.Language;
 import sncf.oui.pmt.bdd.utils.ResourcesUtils;
 
 import java.io.IOException;
-import java.net.URISyntaxException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Collection;
 import java.util.List;
 
 import static sncf.oui.pmt.bdd.TestConfig.TEST_USER;
@@ -170,7 +162,7 @@ public class GivenGlue extends ContextAwareGlue {
 
         Path localPath = Paths.get(dataRoot, context.get("projectName"), ".git");
         try (Repository repo = new FileRepositoryBuilder()
-                .findGitDir(localPath.toFile())
+                .setGitDir(localPath.toFile())
                 .build()) {
             try (Git git = Git.wrap(repo)) {
                 git.checkout().setName("develop").call();
