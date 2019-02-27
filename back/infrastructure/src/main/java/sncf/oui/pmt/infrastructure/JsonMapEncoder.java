@@ -100,11 +100,15 @@ public class JsonMapEncoder implements MapEncoder {
 
         try (JsonGenerator generator = factory.createGenerator(writer)) {
 
-            List<String> prevList = Collections.emptyList();
+            List<String> prevList = Collections.singletonList(""); // needed to iterate at least once below
             generator.setPrettyPrinter(new DefaultPrettyPrinter());
             generator.writeStartObject();
 
             for (String cur : sortedKeys) {
+
+                generator.flush();
+                LOGGER.debug("===========");
+                LOGGER.debug(writer.toString().replaceAll("\\s", ""));
 
                 if (map.get(cur) == null) continue;
 
@@ -132,7 +136,6 @@ public class JsonMapEncoder implements MapEncoder {
                         throw new RuntimeException(e);
                     }
                 });
-
                 generator.writeStringField(curList.get(curList.size() - 1), map.get(cur));
                 prevList = curList;
             }

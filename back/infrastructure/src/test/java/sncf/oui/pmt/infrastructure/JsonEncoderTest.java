@@ -16,6 +16,7 @@ public class JsonEncoderTest {
             .replace('\'', '"');
     private static final String jsonDeep = "{'key':'value','nested':{'subkey':'subvalue'},'nested2':{'bar':'foo','foo':'bar'}}"
             .replace('\'', '"');
+    private static final String jsonDeep2 = "{\"header\":{\"test\":\"test\"},\"pageTitle\":\"bar\",\"welcome\":{\"bijour\":\"foo\",\"title1\":\"value\",\"title2\":\"subvalue\"}}";
 
     public JsonEncoderTest() {
         encoder = new JsonMapEncoder();
@@ -41,21 +42,20 @@ public class JsonEncoderTest {
         decoded.put("key", "value");
         decoded.put("key2", "value2");
         final String encoded = encoder.encode(decoded).block()
-                .replaceAll("\\R", " ")
-                .replaceAll(" ", "");
+                .replaceAll("\\s", "");
         assertEquals(jsonFlat, encoded);
     }
 
     @Test
     public void testEncodesDeepJson() {
         final Map<String, String> decoded = new HashMap<>();
-        decoded.put("key", "value");
-        decoded.put("nested/subkey", "subvalue");
-        decoded.put("nested2/foo", "bar");
-        decoded.put("nested2/bar", "foo");
+        decoded.put("welcome/title1", "value");
+        decoded.put("welcome/title2", "subvalue");
+        decoded.put("pageTitle", "bar");
+        decoded.put("welcome/bijour", "foo");
+        decoded.put("header/test", "test");
         final String encoded = encoder.encode(decoded).block()
-                .replaceAll("\\R", " ")
-                .replaceAll(" ", "");
-        assertEquals(jsonDeep, encoded);
+                .replaceAll("\\s", "");
+        assertEquals(jsonDeep2, encoded);
     }
 }
