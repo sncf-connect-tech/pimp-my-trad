@@ -111,20 +111,22 @@ public class JsonMapEncoder implements MapEncoder {
                 List<String> curList = Lists.newArrayList(cur.split("/"));
 
                 final List<String> finalPrevList = prevList;
-                Optional<AbstractMap.SimpleEntry<Integer, Boolean>> pair = IntStream
-                        .range(0, Math.max(curList.size() - 1, prevList.size() - 1)) // if only the last key differs, there is no need to end an object
+                // number of common keys in path starts (eg: foo/bar, foo/baz => 1)
+                final Optional<Integer> optCommon = IntStream
+                        .range(0, Math.min(curList.size(), prevList.size()))
                         .mapToObj(i -> {
                             return new AbstractMap.SimpleEntry<>(i, curList.get(i) != null && finalPrevList.get(i) != null
                                     && curList.get(i).equals(finalPrevList.get(i)));
                         })
                         .filter(p -> p.getValue().equals(false))
-                        .findFirst();
+                        .findFirst()
+                        .map(AbstractMap.SimpleEntry::getKey);
 
                 // not the same object
-                pair.ifPresent(entry -> {
-                    List<String> subList = curList.subList(entry.getKey(), curList.size() - 1);
+                optCommon.ifPresent(common -> {
+                    List<String> subList = curList.subList(common, curList.size() - 1);
                     try {
-                        for (int i = 0; i < entry.getKey(); i++) generator.writeEndObject();
+                        for (int i = 0; i < finalPrevList.size() - 1 - common; i++) generator.writeEndObject();
                         for (String key : subList) generator.writeObjectFieldStart(key);
                     } catch (IOException e) {
                         throw new RuntimeException(e);
